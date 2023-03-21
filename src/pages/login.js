@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { FaLock, FaUserAlt } from "react-icons/fa";
 import axios from "axios";
+import Head from "next/head";
 const LOGIN_URL = "/login";
 
 axios.create({
@@ -45,67 +46,78 @@ const Login = () => {
   };
 
   return (
-    <div className="loginPage">
-      {/* {user.loggedIn ? <p>Successfully logged in</p> : <></>} */}
-      <form onSubmit={handleSubmit}>
-        <h3>Login</h3>
-        <label
-          htmlFor="email"
-          style={{ alignSelf: "flex-start", fontWeight: "bold" }}
-        >
-          Email:
-        </label>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            alignContent: "center",
-          }}
-        >
-          <FaUserAlt size={30} color="#e40707" style={{ marginRight: 10 }} />
-          <input type="email" id="email" onChange={handleEmailChange} />
-        </div>
-        <label
-          htmlFor="password"
-          style={{ alignSelf: "flex-start", fontWeight: "bold", marginTop: 20 }}
-        >
-          Password:
-        </label>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            alignContent: "center",
-          }}
-        >
-          <FaLock size={30} color="#e40707" style={{ marginRight: 10 }} />
-          <input
-            type="password"
-            id="password"
-            onChange={handlePasswordChange}
-          />
-        </div>
-        <button
-          style={{
-            alignSelf: "center",
-            width: "100%",
-            fontWeight: "bold",
-            marginTop: 20,
-          }}
-          type="submit"
-        >
-          Login
-        </button>
+    <>
+      {" "}
+      <Head>
+        <title>Dashboard</title>
+        <meta name="keywords" content="dashboard" />
+      </Head>
+      <div className="loginPage">
+        {/* {user.loggedIn ? <p>Successfully logged in</p> : <></>} */}
+        <form onSubmit={handleSubmit}>
+          <h3>Login</h3>
+          <label
+            htmlFor="email"
+            style={{ alignSelf: "flex-start", fontWeight: "bold" }}
+          >
+            Email:
+          </label>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              alignContent: "center",
+            }}
+          >
+            <FaUserAlt size={30} color="#e40707" style={{ marginRight: 10 }} />
+            <input type="email" id="email" onChange={handleEmailChange} />
+          </div>
+          <label
+            htmlFor="password"
+            style={{
+              alignSelf: "flex-start",
+              fontWeight: "bold",
+              marginTop: 20,
+            }}
+          >
+            Password:
+          </label>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              alignContent: "center",
+            }}
+          >
+            <FaLock size={30} color="#e40707" style={{ marginRight: 10 }} />
+            <input
+              type="password"
+              id="password"
+              onChange={handlePasswordChange}
+            />
+          </div>
+          <button
+            style={{
+              alignSelf: "center",
+              width: "100%",
+              fontWeight: "bold",
+              marginTop: 20,
+            }}
+            type="submit"
+          >
+            Login
+          </button>
 
-        <button className="forgotPassword" type="submit">
-          Forgot Password?
-        </button>
-      </form>
-    </div>
+          <button className="forgotPassword" type="submit">
+            Forgot Password?
+          </button>
+        </form>
+      </div>
+    </>
   );
 };
 
