@@ -5,15 +5,15 @@
 @tailwind utilities;
 
 html {
-  background-color: #333;
+  background-color: white;
+  font-family: "Nunito";
 }
 
-body {
+header, footer {
   margin: 0;
   padding: 0px 50px;
   background: #963634;
-  color: #333;
-  font-family: "Nunito";
+  color: white;
 }
 a {
   color: #333;
@@ -25,7 +25,7 @@ a {
 }
 nav {
   background-color: #963634;
-  margin: 10px auto 80px;
+  margin: 0px auto 80px;
   /* padding: 10px 0; */
   padding: 30px 20px;
   display: flex;
@@ -141,4 +141,50 @@ button.forgotPassword:hover {
 .not-found a {
   text-decoration: underline;
   color: #4979ff;
+}
+
+
+
+
+
+
+
+
+/* TABLE STYLES */
+.table .table-header{
+  font-weight: 600;
+  background-color: white;
+}
+.table .table-header .table-cell{
+  opacity: 0.7;
+}
+.table .table-row{
+  padding-inline: 5em;
+  margin-bottom: 0.5em;
+  background-color: white;
+}
+.table .table-row > td:first-child {
+  padding-left: 4em;
+}
+.table .table-row > td:last-child {
+  padding-right: 4em;
+}
+.table .table-cell{
+  padding-block: 2em;
+  padding-inline: 1.5em;
+  background-color: white;
+}
+
+.table .table-cell {
+  padding-block: 2em;
+  padding-inline: 1.5em;
+  background-color: white;
+}
+
+td {
+  padding: 10px;
+  width: 100vw;
+}
+table {
+  text-align: center;
 }

@@ -8,17 +8,16 @@ function Navbar() {
 
   return (
     <nav>
-      <div className="logo">
+      <div className="logo" style={{display:'flex', justifyContent: "space-evenly", alignItems:'center'}}>
         <Image
           style={{ borderRadius: 5 }}
           src="/alliance-logo.jpeg"
           width={50}
           height={50}
-        />
-        {"    "}Service Charge 5
+        /><div style={{marginLeft:'10px', fontSize: '30px'}}>SERVICE CHARGE 5</div>
       </div>
 
-      <div style={{ justifyContent: "space-evenly", display: "flex" }}>
+      <div style={{ justifyContent: "space-evenly", display: "left" }}>
         <Link
           className={router.asPath === "/dashboard" ? "active-link" : ""}
           href="/dashboard"
