@@ -6,7 +6,8 @@ function Layout({ children }) {
   return (
     <div className="content">
       <Navbar />
-      <div style={{margin:'20px', marginTop:'-50px'}}>{children}</div>
+      <div style={{ width: '100vw', height: '130px', marginTop:'-50px'}}> </div>
+      <div style={{margin:'20px'}} >{children}</div>
       <Footer />
     </div>
   );

@@ -1,15 +1,12 @@
 import React from "react";
 
 function Footer() {
-  return <footer style={{ 
-    position: "fixed", 
-    bottom: 0, 
-    width: "100%", 
-    textAlign: "center",
-    padding: "10px 0"
-  }}>
-    Copyright Alliance Jumpstart G5 @2023
-    </footer>;
-}
+  return (
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      <footer style={{ textAlign: "center", padding: "10px", color:'white'}}>
+      Copyright Alliance Jumpstart G5 @2023
+      </footer>
+  </div>
+)}
 
 export default Footer;

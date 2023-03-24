@@ -7,17 +7,19 @@ function Navbar() {
   const router = useRouter();
 
   return (
-    <nav>
-      <div className="logo" style={{display:'flex', justifyContent: "space-evenly", alignItems:'center'}}>
+    <nav style={{marginTop:'40px'}}>
+      <div className="logo" style={{height:'50px'}}>
+        <a href="/" style={{ display: "flex"}}>
         <Image
-          style={{ borderRadius: 5 }}
+          style={{ borderRadius: 5, marginTop:'-10px', marginBottom:'10px' }}
           src="/alliance-logo.jpeg"
           width={50}
           height={50}
         /><div style={{marginLeft:'10px', fontSize: '30px'}}>SERVICE CHARGE 5</div>
+        </a>
       </div>
 
-      <div style={{ justifyContent: "space-evenly", display: "left" }}>
+      <div style={{ justifyContent: "space-evenly", alignItems: "center", display: "left" }}>
         <Link
           className={router.asPath === "/dashboard" ? "active-link" : ""}
           href="/dashboard"
