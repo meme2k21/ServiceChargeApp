@@ -18,6 +18,23 @@ function Tickets({ tickets }) {
   const [ticketStatus, setTicketStatus] = useState('Ticket Status');
   const [ticketYearCreated, setTicketYearCreated] = useState('Year Created');
 
+  //Modal Delete component
+  const [showModal, setShowModal] = useState(false);
+
+  const handleShowModal = () => {
+      setShowModal(true);
+      console.log(showModal);
+  };
+
+  const handleDelete = () => {
+      // Perform delete action
+      handleCancel();      
+  };
+
+  const handleCancel = () => {
+      setShowModal(false);
+  };
+
   return (
     <>
       <Head>
@@ -77,104 +94,80 @@ function Tickets({ tickets }) {
             <td>sample</td>
             <td>sample</td>
             <td>sample</td>
-            <td>
-              <select>
-                <option>udo</option>
-                <option>udo</option>
-                <option>udo</option>
-              </select>
+            <td onClick={handleShowModal}>
+              <a href="" onClick={(e)=> e.preventDefault()} title='update'>Case Filed</a>
             </td>
+              {showModal && <Modal onYes={handleDelete} onNo={handleCancel} />}
           </tr>
           <tr>
             <td>sample</td>
             <td>sample</td>
             <td>sample</td>
             <td>sample</td>
-            <td>
-              <select>
-                <option>udo</option>
-                <option>udo</option>
-                <option>udo</option>
-              </select>
+            <td onClick={handleShowModal}>
+              <a href="" onClick={(e)=> e.preventDefault()} title='update'>Case Filed</a>
             </td>
+              {showModal && <Modal onYes={handleDelete} onNo={handleCancel} />}
           </tr>
           <tr>
             <td>sample</td>
             <td>sample</td>
             <td>sample</td>
             <td>sample</td>
-            <td>
-              <select>
-                <option>udo</option>
-                <option>udo</option>
-                <option>udo</option>
-              </select>
+            <td onClick={handleShowModal}>
+              <a href="" onClick={(e)=> e.preventDefault()} title='update'>Case Filed</a>
             </td>
+              {showModal && <Modal onYes={handleDelete} onNo={handleCancel} />}
           </tr>
           <tr>
             <td>sample</td>
             <td>sample</td>
             <td>sample</td>
             <td>sample</td>
-            <td>
-              <select>
-                <option>udo</option>
-                <option>udo</option>
-                <option>udo</option>
-              </select>
+            <td onClick={handleShowModal}>
+              <a href="" onClick={(e)=> e.preventDefault()} title='update'>Case Filed</a>
             </td>
+              {showModal && <Modal onYes={handleDelete} onNo={handleCancel} />}
           </tr>
           <tr>
             <td>sample</td>
             <td>sample</td>
             <td>sample</td>
             <td>sample</td>
-            <td>
-              <select>
-                <option>udo</option>
-                <option>udo</option>
-                <option>udo</option>
-              </select>
+            <td onClick={handleShowModal}>
+              <a href="" onClick={(e)=> e.preventDefault()} title='update'>Case Filed</a>
             </td>
+              {showModal && <Modal onYes={handleDelete} onNo={handleCancel} />}
           </tr>
           <tr>
             <td>sample</td>
             <td>sample</td>
             <td>sample</td>
             <td>sample</td>
-            <td>
-              <select>
-                <option>udo</option>
-                <option>udo</option>
-                <option>udo</option>
-              </select>
+            <td onClick={handleShowModal}>
+              <a href="" onClick={(e)=> e.preventDefault()} title='update'>Case Filed</a>
             </td>
+              {showModal && <Modal onYes={handleDelete} onNo={handleCancel} />}
           </tr>
           <tr>
             <td>sample</td>
             <td>sample</td>
             <td>sample</td>
             <td>sample</td>
-            <td>
-              <select>
-                <option>udo</option>
-                <option>udo</option>
-                <option>udo</option>
-              </select>
+            <td onClick={handleShowModal}>
+              <a href="" onClick={(e)=> e.preventDefault()} title='update'>Case Filed</a>
             </td>
+              {showModal && <Modal onYes={handleDelete} onNo={handleCancel} />}
           </tr>
           <tr>
             <td>sample</td>
             <td>sample</td>
             <td>sample</td>
             <td>sample</td>
-            <td>
-              <select>
-                <option>udo</option>
-                <option>udo</option>
-                <option>udo</option>
-              </select>
+            <td onClick={handleShowModal}>
+              <a href="" onClick={(e)=> e.preventDefault()} title='update'>Case Filed</a>
             </td>
+              {showModal && <Modal onYes={handleDelete} onNo={handleCancel} />}
           </tr>
         </tbody>
       </table>
@@ -190,3 +183,39 @@ function Tickets({ tickets }) {
 }
 
 export default Tickets;
+
+
+
+export function Modal( {onYes, onNo}) {
+
+  return (
+    <div 
+      style={{ 
+        position: 'fixed',
+        display: "flex", 
+        backgroundColor: "rgba(0, 0, 0, 0.1)", 
+        top: "0", 
+        left: "0", 
+        width: "100vw", 
+        height: "100%", 
+        zIndex: "1",
+        alignItems:'center',
+        justifyContent: 'center' }}>
+          <div 
+            className="modal-content position-absolute" 
+            style={{ 
+              backgroundColor: "#333333",
+              border: "1px solid #888", 
+              width: "80%", 
+              maxWidth: "600px", 
+              padding: "20px" }}>
+              <h6 style={{ color: 'white', textAlign: 'center' }}>Are you sure you want to delete?</h6>
+              <br />
+              <div className="button-group" style={{ textAlign: 'right', marginTop: "-1em" }}>
+                  <button className="button danger" style={{ width: '7em', background:'#963634' }} onClick={onYes}>Yes</button>
+                  <button className="button" style={{ width: '7em', marginLeft: "2em", background:'#963634'  }} onClick={onNo}>No</button>
+              </div>
+          </div>
+    </div>
+);
+}
