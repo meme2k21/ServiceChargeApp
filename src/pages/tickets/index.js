@@ -1,6 +1,5 @@
 import Head from "next/head";
 import React, {useState} from "react";
-import styles from "../../styles/Home.module.css";
 
 export const getStaticProps = async () => {
   const res = await fetch("https://jsonplaceholder.typicode.com/users");
@@ -209,7 +208,7 @@ export function Modal( {onYes, onNo}) {
               width: "80%", 
               maxWidth: "600px", 
               padding: "20px" }}>
-              <h6 style={{ color: 'white', textAlign: 'center' }}>Are you sure you want to delete?</h6>
+              <h6 style={{ color: 'white', textAlign: 'center' }}>Update ticket?</h6>
               <br />
               <div className="button-group" style={{ textAlign: 'right', marginTop: "-1em" }}>
                   <button className="button danger" style={{ width: '7em', background:'#963634' }} onClick={onYes}>Yes</button>

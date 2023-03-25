@@ -1,10 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 
 function Navbar() {
   const router = useRouter();
+  const [isLogin, setIsLogin] = useState(false);
+
+  function handleLoginClick() {
+    setIsLogin(!isLogin);
+  }
 
   return (
     <nav style={{marginTop:'40px'}}>
@@ -19,7 +24,7 @@ function Navbar() {
         </a>
       </div>
 
-      <div style={{ justifyContent: "space-evenly", alignItems: "center", display: "left" }}>
+      <div style={{ justifyContent: "space-between", alignItems: "center", display: "left" }}>
         <Link
           className={router.asPath === "/dashboard" ? "active-link" : ""}
           href="/dashboard"
@@ -34,16 +39,28 @@ function Navbar() {
         </Link>
         <Link
           className={router.asPath === "/reports" ? "active-link" : ""}
-          href="#"
+          href="/reports"
         >
           Reports
         </Link>
-        <Link
+        
+        {isLogin ? (
+          <Link
           className={router.asPath === "/settings" ? "active-link" : ""}
           href="/settings"
+          onClick={handleLoginClick}
+          >
+            Settings
+          </Link>
+        ) : 
+        <Link
+          className={router.asPath === "/login" ? "active-link" : ""}
+          href="/login"
+          onClick={handleLoginClick}
         >
-          Settings
+          Login
         </Link>
+        }
       </div>
     </nav>
   );
