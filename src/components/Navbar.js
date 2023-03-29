@@ -12,19 +12,33 @@ function Navbar() {
   }
 
   return (
-    <nav style={{marginTop:'40px'}}>
-      <div className="logo" style={{height:'50px'}}>
-        <a href="/" style={{ display: "flex"}}>
-        <Image
-          style={{ borderRadius: 5, marginTop:'-10px', marginBottom:'10px' }}
-          src="/alliance-logo.jpeg"
-          width={50}
-          height={50}
-        /><div style={{marginLeft:'10px', fontSize: '30px'}}>SERVICE CHARGE 5</div>
+    <nav style={{ marginTop: "40px" }}>
+      <div className="logo" style={{ height: "50px" }}>
+        <a href="/" style={{ display: "flex" }}>
+          <Image
+            alt="Alliance logo"
+            style={{
+              borderRadius: 5,
+              marginTop: "-10px",
+              marginBottom: "10px",
+            }}
+            src="/alliance-logo.jpeg"
+            width={50}
+            height={50}
+          />
+          <div style={{ marginLeft: "10px", fontSize: "30px" }}>
+            SERVICE CHARGE 5
+          </div>
         </a>
       </div>
 
-      <div style={{ justifyContent: "space-between", alignItems: "center", display: "left" }}>
+      <div
+        style={{
+          justifyContent: "space-between",
+          alignItems: "center",
+          display: "left",
+        }}
+      >
         <Link
           className={router.asPath === "/dashboard" ? "active-link" : ""}
           href="/dashboard"
@@ -43,24 +57,24 @@ function Navbar() {
         >
           Reports
         </Link>
-        
+
         {isLogin ? (
           <Link
-          className={router.asPath === "/settings" ? "active-link" : ""}
-          href="/settings"
-          onClick={handleLoginClick}
+            className={router.asPath === "/settings" ? "active-link" : ""}
+            href="/settings"
+            onClick={handleLoginClick}
           >
             Settings
           </Link>
-        ) : 
-        <Link
-          className={router.asPath === "/login" ? "active-link" : ""}
-          href="/login"
-          onClick={handleLoginClick}
-        >
-          Login
-        </Link>
-        }
+        ) : (
+          <Link
+            className={router.asPath === "/login" ? "active-link" : ""}
+            href="/login"
+            onClick={handleLoginClick}
+          >
+            Login
+          </Link>
+        )}
       </div>
     </nav>
   );

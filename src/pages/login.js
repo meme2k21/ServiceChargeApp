@@ -5,18 +5,18 @@ import Head from "next/head";
 import { FaRegEnvelope, FaUnlockAlt } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/router";
 const LOGIN_URL = "/login";
 
 axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: "http://localhost:3500",
 });
 
 const Login = () => {
-  //   const { user, setUser } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLogin, setIsLogin] = useState(false);
 
+  const router = useRouter();
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
@@ -25,21 +25,22 @@ const Login = () => {
     setPassword(event.target.value);
   };
 
+  const credentials = { userEmail: email, userPassword: password };
+
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log("handlesubmit");
     axios
-      .post("http://localhost:8080/login", {
-        userEmail: email,
-        userPassword: password,
-      })
+      .post("http://localhost:8080/login", credentials)
       .then((response) => {
         // authentication successful, do something here
         if (response.status === 200 && response.data !== "") {
+          router.push("/dashboard");
           console.log("Success fetch user");
-          setUser({ loggedIn: true, data: response.data });
+          // setUser({ loggedIn: true, data: response.data });
         } else {
           console.log("Fail fetch user");
-          setUser({ loggedIn: false });
+          // setUser({ loggedIn: false });
         }
       })
       .catch((error) => {
@@ -49,7 +50,7 @@ const Login = () => {
   };
 
   return (
-    <>
+    <div>
       <Head>
         <title>Login</title>
         <meta name="keywords" content="dashboard" />
@@ -64,6 +65,7 @@ const Login = () => {
               src="/logo-alliance-comp.png"
               width={200}
               height={200}
+              alt="Logo Alliance"
             />
             {/* <div className="w-full h-full bg-gray-400">Some pic</div> */}
             <Image
@@ -85,43 +87,56 @@ const Login = () => {
               {/* <h2 className="text-3xl font-bold text-red-700">Sign in</h2> */}
               {/* <div className="border-2 w-10 border-red-700 inline-block mb-2"></div> */}
               <div className="flex flex-col items-center">
-                <div className="bg-gray-100 w-full p-0 flex items-center mb-2 border-b-2 border-red-700">
-                  <FaRegEnvelope className="text-gray-400 m-2" />
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    className="bg-gray-100 outline-none text-sm flex-1 border-hidden"
-                  />
-                </div>
-                <div className="bg-gray-100 w-full p-0 flex items-center border-b-2  border-red-700 mb-4">
-                  <FaUnlockAlt className="text-gray-400 m-2" />
-                  <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    className="bg-gray-100 outline-none text-sm flex-1 border-hidden autofill:bg-black"
-                  />
-                </div>
-                <div className="flex justify-between w-full mb-5">
-                  <label className="flex items-center text-xs">
+                <form onSubmit={handleSubmit}>
+                  <div className="bg-gray-100 w-full p-0 flex items-center mb-2 border-b-2 border-red-700">
+                    <FaRegEnvelope className="text-gray-400 m-2" />
                     <input
-                      type="checkbox"
-                      name="remember"
-                      className="mr-1 flex-1"
+                      type="email"
+                      name="email"
+                      value={email}
+                      onChange={handleEmailChange}
+                      placeholder="Email"
+                      className="bg-gray-100 outline-none text-sm flex-1 border-hidden"
                     />
-                    Remember me
-                  </label>
-                  <Link href="/forgotpassword" className="text-xs">
-                    Forgot Password?
-                  </Link>
-                </div>
-                <Link
+                  </div>
+                  <div className="bg-gray-100 w-full p-0 flex items-center border-b-2  border-red-700 mb-4">
+                    <FaUnlockAlt className="text-gray-400 m-2" />
+                    <input
+                      type="password"
+                      name="password"
+                      value={password}
+                      onChange={handlePasswordChange}
+                      placeholder="Password"
+                      className="bg-gray-100 outline-none text-sm flex-1 border-hidden autofill:bg-black"
+                    />
+                  </div>
+                  <div className="flex justify-between w-full mb-5">
+                    <label className="flex items-center text-xs">
+                      <input
+                        type="checkbox"
+                        name="remember"
+                        className="mr-1 flex-1"
+                      />
+                      Remember me
+                    </label>
+                    <Link href="/forgotpassword" className="text-xs">
+                      Forgot Password?
+                    </Link>
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full bg-red-700 hover:bg-white hover:text-red-700"
+                  >
+                    Login
+                  </button>
+                </form>
+
+                {/* <Link
                   href="/#"
                   className="bg-red-700 text-white p-2 rounded-sm w-full font-semibold hover:bg-white hover:text-red-700 mb-2 text-lg"
                 >
                   LOGIN
-                </Link>
+                </Link> */}
                 <div className="text-sm">
                   <p>
                     Don't have an account?{" "}
@@ -136,7 +151,7 @@ const Login = () => {
           </div>
         </div>
       </main>
-    </>
+    </div>
   );
 };
 

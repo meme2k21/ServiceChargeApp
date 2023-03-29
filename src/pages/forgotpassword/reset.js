@@ -17,6 +17,7 @@ function ResetPassword() {
           <div className="w-1/2 bg-white rounded-l-lg p-10">
             <p className="font-semibold text-left">powered by</p>
             <Image
+              alt="Alliance Logo"
               style={{ borderRadius: 5 }}
               src="/logo-alliance-comp.png"
               width={200}
