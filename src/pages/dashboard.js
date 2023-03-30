@@ -26,9 +26,12 @@ function dashboard() {
   const [tickets, setTickets] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:8080/tickets").then((response) => {
-      setTickets(response?.data);
-    });
+    axios
+      .get("http://localhost:8080/tickets")
+      .then((response) => {
+        setTickets(response?.data);
+      })
+      .catch((err) => console.log(err));
     console.log("useffect fomr dashboard");
   }, [selectedRows]);
 
