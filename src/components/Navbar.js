@@ -40,8 +40,8 @@ function Navbar() {
         }}
       >
         <Link
-          className={router.asPath === "/dashboard" ? "active-link" : ""}
-          href="/dashboard"
+          className={router.asPath === "/" ? "active-link" : ""}
+          href="/"
         >
           Dashboard
         </Link>

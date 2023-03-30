@@ -30,7 +30,7 @@ export default function CreateTicket() {
         console.log(response.data);
         // authentication successful, do something here
         if (response.status === 200) {
-          router.push("/dashboard");
+          router.push("/");
           console.log("Success create ticket");
         } else {
           console.log("Fail create ticket");
