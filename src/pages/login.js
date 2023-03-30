@@ -8,9 +8,9 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 const LOGIN_URL = "/login";
 
-axios.create({
-  baseURL: "http://localhost:3500",
-});
+// axios.create({
+//   baseURL: "http://localhost:3500",
+// });
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -25,7 +25,7 @@ const Login = () => {
     setPassword(event.target.value);
   };
 
-  const credentials = { userEmail: email, userPassword: password };
+  const credentials = { email: email, password: password };
 
   const handleSubmit = (event) => {
     event.preventDefault();

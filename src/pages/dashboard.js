@@ -27,27 +27,27 @@ function dashboard() {
 
   useEffect(() => {
     axios.get("http://localhost:8080/tickets").then((response) => {
-      setTickets(response.data);
+      setTickets(response?.data);
     });
     console.log("useffect fomr dashboard");
   }, [selectedRows]);
 
-  const handleButtonClick = () => {
-    console.log("clicked");
+  const handleButtonClick = (row) => {
+    console.log("clicked Ticket #" + row.ticket_id);
   };
 
   const handleChange = useCallback((state) => {
-    setSelectedRows(state.selectedRows);
+    setSelectedRows(state?.selectedRows);
   }, []);
 
   const handleDeleteRow = (row) => {
     axios
       .delete("http://localhost:8080/ticket/delete/" + row.ticket_id)
       .then((response) => {
-        console.log("Ticket deleted:", response.data);
+        console.log("Ticket deleted:", response?.data);
         // Update tickets state by filtering out the deleted ticket
         setTickets((prevTickets) =>
-          prevTickets.filter((ticket) => ticket.ticket_id !== row.ticket_id)
+          prevTickets?.filter((ticket) => ticket?.ticket_id !== row?.ticket_id)
         );
       })
       .catch((error) => {
@@ -87,8 +87,8 @@ function dashboard() {
         right: true,
       },
       {
-        cell: () => (
-          <button className="bg-red-700" onClick={handleButtonClick}>
+        cell: (row) => (
+          <button className="bg-red-700" onClick={() => handleButtonClick(row)}>
             Edit
           </button>
         ),
@@ -111,7 +111,7 @@ function dashboard() {
     []
   );
 
-  const sortedData = tickets.sort(
+  const sortedData = tickets?.sort(
     (a, b) => new Date(b.date_created) - new Date(a.date_created)
   );
 
