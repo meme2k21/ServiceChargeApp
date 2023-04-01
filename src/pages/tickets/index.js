@@ -157,7 +157,7 @@ function Tickets() {
           <option>Ticket Subject</option>
           <option>Ticket Status</option>
         </select> */}
-          <a onClick={handleCreate} style={{ background: "#963634", padding: "20px", borderRadius: "5px", display:'flex', right: 0, alignItems:'center', color:'white', width:'12vw' }}
+          <a onClick={handleCreate} style={{ background: "#963634", padding: "20px", borderRadius: "5px", display:'flex', right: 0, alignItems:'center', color:'white' }}
           onMouseEnter={(e) => { e.target.style.background = "#F27B53"; }}
           onMouseLeave={(e) => { e.target.style.background = "#963634"; }}
           >

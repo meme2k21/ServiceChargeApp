@@ -68,16 +68,16 @@ function dashboard() {
         sortable: true,
         right: true,
       },
-      {
-        cell: (row) => (
-          <button className="bg-red-700" onClick={() => handleButtonClick(row)}>
-            Edit
-          </button>
-        ),
-        ignoreRowClick: true,
-        allowOverflow: true,
-        button: true,
-      },
+      // {
+      //   cell: (row) => (
+      //     <button className="bg-red-700" onClick={() => handleButtonClick(row)}>
+      //       Edit
+      //     </button>
+      //   ),
+      //   ignoreRowClick: true,
+      //   allowOverflow: true,
+      //   button: true,
+      // },
       // {
       //   name: "Delete",
       //   cell: (row) => (
@@ -109,6 +109,13 @@ function dashboard() {
   const onCancelCreate = () => {
     handleChange;
     setShowCreateModal(false);
+  }
+
+  const [showViewTicketModal, setShowViewTicketModal] = useState(false);
+
+  const handleRow = () => {
+    console.log("on row clicked");
+    setShowViewTicketModal(true);
   }
 
   return (
@@ -177,7 +184,6 @@ function dashboard() {
           </div>
         </div>
 
-
         <DataTable
           title="Aging Tickets"
           data={sortedData}
@@ -185,6 +191,7 @@ function dashboard() {
           selectableRows
           pagination
           onSelectedRowsChange={handleChange}
+          onRowClicked={handleRow}
         />
       </div>
     </div>
@@ -192,3 +199,5 @@ function dashboard() {
 }
 
 export default dashboard;
+
+
