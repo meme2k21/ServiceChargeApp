@@ -205,7 +205,7 @@ function Tickets() {
                     {ticket.ticket_status}
                   </a>
                 </td>
-                {showUpdateModal && clickedId===ticket.ticket_id && <ModalComponent title='Update Ticket' label={`Are you sure to update '${ticket.ticket_title}'?`} onYes={onUpdate} onCancel={onCancelUpdate} show={showUpdateModal}/>}
+                {showUpdateModal && clickedId===ticket.ticket_id && <ModalEdit title='Update Ticket' label={`Are you sure to update '${ticket.ticket_title}'?`} onYes={onUpdate} onCancel={onCancelUpdate} show={showUpdateModal}/>}
                 <td onClick={() => handleshowDeleteModal(ticket.ticket_id)}>
                   <a href="" onClick={(e)=> e.preventDefault()} title="delete">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width='30' height='30' > 
@@ -234,6 +234,54 @@ function Tickets() {
 export default Tickets;
 
 export const ModalComponent = ({ title, label, onYes, onCancel, show }) => {
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    backgroundColor:'white', 
+    height:'25%'
+  };
+
+  return (
+          <Modal
+            open={show}
+            onClose={onCancel}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+            className="modal d-block"
+            style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}
+          >
+            <div className="modal-dialog modal-dialog-centered" style={style}>
+              <div className="modal-header" style={{padding: '10px', border: '1px solid gray', backgroundColor: '#963634', color: 'white'}} >
+                <h5 className="modal-title">{title}</h5>
+                <svg
+                    style={{ position: 'absolute', top: '5px', right: '5px', cursor: 'pointer', border:'1px solid gray' }}
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="30" height="30" fill="currentColor" className="bi bi-x" viewBox="0 0 16 16"
+                    onClick={onCancel}
+                >
+                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" ></path>
+                </svg>
+              </div>
+              <div className="modal-body" style={{padding: '3%'}}>
+                <h6 style={{ color: 'black' }}>{label}</h6>
+              </div>
+              <div className="modal-footer" style={{ display: 'flex', justifyContent: 'space-between', position:'absolute', bottom: '10px', right: '10%', alignItems:'center', textAlign:'center'}}>
+                <button type="button" className="btn btn-primary" onClick={onYes} style={{ flex: '1 0 auto', backgroundColor:'#963634', marginRight:'10%' }}>Yes</button>
+                <button type="button" className="btn btn-primary" onClick={onCancel} style={{ flex: '1 0 auto', backgroundColor: '#929292' }}>Cancel</button>
+              </div>
+            </div>
+          </Modal>
+  );
+};
+
+export const ModalEdit = ({ title, label, onYes, onCancel, show }) => {
 
   const style = {
     position: 'absolute',
