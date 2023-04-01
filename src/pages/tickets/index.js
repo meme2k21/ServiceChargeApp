@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import CreateTicket from "../ticket/create";
 
 export const getStaticProps = async () => {
   const res = await fetch("https://jsonplaceholder.typicode.com/users");
@@ -16,7 +17,6 @@ export const getStaticProps = async () => {
     props: { tickets: data },
   };
 };
-
 // for ticketManagement
 
 function Tickets() {
@@ -42,46 +42,76 @@ function Tickets() {
     setSelectedRows(state?.selectedRows);
   }, []);
 
-  const handleDeleteRow = (row) => {
-    axios
-      .delete("http://localhost:8080/ticket/delete/" + row.ticket_id)
+  const [ticketHealth, setTicketHealth] = useState('Ticket Health');
+  const [ticketStatus, setTicketStatus] = useState('Ticket Status');
+  const [ticketYearCreated, setTicketYearCreated] = useState('Year Created');
+
+  //For Modal shared variables
+  const [clickedId, setClickedId] = useState('');
+
+  //Modal Delete component
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+
+  const handleUpdateModal = (id) => {
+    setShowUpdateModal(true);
+    console.log(showUpdateModal);
+    setClickedId(id);
+  }
+
+  const onUpdate = () => {
+    onCancelUpdate();
+  }
+
+  const onCancelUpdate = () => {
+    setShowUpdateModal(false);
+  }
+
+  //Modal Delete component
+  const [showDeleteModal, setshowDeleteModal] = useState(false);
+
+  const handleshowDeleteModal = (id) => {
+      setshowDeleteModal(true);
+      console.log(showDeleteModal);
+      setClickedId(id);
+  };
+
+  const onDelete = () => {
+      // Perform delete action
+      axios
+      .delete("http://localhost:8080/ticket/delete/" + clickedId)
       .then((response) => {
         console.log("Ticket deleted:", response?.data);
         // Update tickets state by filtering out the deleted ticket
         setTickets((prevTickets) =>
-          prevTickets?.filter((ticket) => ticket?.ticket_id !== row?.ticket_id)
+          prevTickets?.filter((ticket) => ticket?.ticket_id !== clickedId)
         );
       })
       .catch((error) => {
         console.error("Error deleting ticket:", error);
       });
+      onCancelDelete();      
   };
 
-  const [ticketHealth, setTicketHealth] = useState('Ticket Health');
-  const [ticketStatus, setTicketStatus] = useState('Ticket Status');
-  const [ticketYearCreated, setTicketYearCreated] = useState('Year Created');
-
-  //Modal Delete component
-  const [showModal, setShowModal] = useState(false);
-  const [clickedId, setClickedId] = useState('');
-
-  const handleShowModal = (id) => {
-      setShowModal(true);
-      console.log(showModal);
-      setClickedId(id);
+  const onCancelDelete = () => {
+      setshowDeleteModal(false);
   };
 
-  const handleDelete = () => {
-      // Perform delete action
-      handleCancel();      
-  };
+  //Modal Create component
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
-  const handleCancel = () => {
-      setShowModal(false);
-  };
+  const handleCreate =() => {
+    setShowCreateModal(true);
+    console.log(showCreateModal);
+  }
 
+  const onCreate = () => {
+    onCancelCreate();
+  } 
 
-  console.log(tickets);
+  const onCancelCreate = () => {
+    setShowCreateModal(false);
+  }
+
   return (
     <>
       <Head>
@@ -119,32 +149,33 @@ function Tickets() {
       </div>
 
       {/* For ticket searching */}
-      <div style={{marginTop:'50px', marginBottom: '-40px'}}>
-        {/* <input type='search' placeholder='Search' style={{border: '1px solid black', color:'black', height:'40px', width:'350px'}}></input>
-        <button type='search' style={{backgroundColor:'#D9D9D9', fontSize:'16px', marginRight:'15px', color:'black', height:'40px', width:'227px', float:'right'}}>Add Email Reminder</button>
+      <div style={{marginTop:'50px', marginBottom: '-40px', display:'flex', justifyContent: 'space-between', alignItems: 'baseline'}}>
+        <input type='search' placeholder='Search' style={{border: '1px solid black', color:'black', height:'40px', width:'350px', bottom: 0}}></input>
+        {/* <button type='search' style={{backgroundColor:'#D9D9D9', fontSize:'16px', marginRight:'15px', color:'black', height:'40px', width:'227px', float:'right'}}>Add Email Reminder</button>
         <select type='search' style={{backgroundColor:'#D9D9D9', fontSize:'16px', marginRight:'10px', color:'black', height:'40px', width:'227px', float:'right'}}>
           <option>Ticket Number</option>
           <option>Ticket Subject</option>
           <option>Ticket Status</option>
         </select> */}
-        <div style={{ background: "#F27B53", padding: "20px", borderRadius: "5px", display:'flex', alignItems:'center', position: 'relative', width: '15vw' }}>
-          <a onClick={() => {
-            router.push("/ticket/create");
-            }}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-clipboard-plus" viewBox="0 0 16 16"> 
-              <path fill-rule="evenodd" d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z" fill="white"></path> <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z" fill="white"></path> <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z" fill="white"></path> 
+          <a onClick={handleCreate} style={{ background: "#963634", padding: "20px", borderRadius: "5px", display:'flex', right: 0, alignItems:'center', color:'white', width:'12vw' }}
+          onMouseEnter={(e) => { e.target.style.background = "#F27B53"; }}
+          onMouseLeave={(e) => { e.target.style.background = "#963634"; }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-clipboard-plus" viewBox="0 0 16 16" >
+              <path fill-rule="evenodd" d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z" fill="white"></path> 
+              <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z" fill="white"></path> 
+              <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z" fill="white"></path> 
             </svg>
-            <label style={{color:'white'}}>New Ticket</label>
+            <div style={{ fontSize: "20px", fontWeight: "bold", marginRight: "10px"}}>New Ticket</div>
           </a>
-        </div>
-        
+          {showCreateModal && <CreateTicket show={showCreateModal} onYes={onCreate} onCancel={onCancelCreate}/>}
       </div>
       <br /><br />
-      
+
       {/* table display */}
       <table style={{borderBottom:'2px solid black', marginBottom:'10px', paddingLeft:'1000px', textAlign:'left'}}>
         <thead>
-          <tr style={{backgroundColor:'#28B79B', color:'black', fontSize:'16px'}}>
+          <tr style={{backgroundColor:'#28B79B', color:'white', fontSize:'16px', fontWeight: "bold" }}>
             <td className="table-cell flex-row" >Ticket Number</td>
             <td className="table-cell">Ticket Subject</td>
             <td className="table-cell">Ticket Description</td>
@@ -155,7 +186,6 @@ function Tickets() {
         </thead>
         <tbody>
           {tickets.map(ticket => {
-            console.log('mapping');
             return (
               <tr key={ticket.ticket_id} className='table-row' style={{borderBottom: '1px solid rgba(0, 0, 0, 0.3)'}}>
                 <td className="table-cell flex-row" >
@@ -170,23 +200,23 @@ function Tickets() {
                 <td className="table-cell">
                   {ticket.date_created}
                 </td>
-                <td className="table-cell" onClick={() => handleShowModal(ticket.ticket_id)}>
+                <td className="table-cell" onClick={() => handleUpdateModal(ticket.ticket_id)}>
                   <a href="" onClick={(e)=> e.preventDefault()} title='update'>
                     {ticket.ticket_status}
                   </a>
                 </td>
-              {showModal && clickedId===ticket.ticket_id && <ModalComponent title='DeleteModal' label={`Are you sure to delete ${ticket.ticket_title}?`} onYes={handleDelete} onCancel={handleCancel} show={showModal}/>}
-              <td onClick={() => handleShowModal(ticket.ticket_id)}>
-                <a href="" onClick={(e)=> e.preventDefault()} title="delete">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width='30' height='30'> 
-                    <g> 
-                      <path fill="none" d="M0 0h24v24H0z"/> 
-                      <path d="M17 6h5v2h-2v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8H2V6h5V3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v3zm1 2H6v12h12V8zm-9 3h2v6H9v-6zm4 0h2v6h-2v-6zM9 4v2h6V4H9z"/> 
+                {showUpdateModal && clickedId===ticket.ticket_id && <ModalComponent title='Update Ticket' label={`Are you sure to update '${ticket.ticket_title}'?`} onYes={onUpdate} onCancel={onCancelUpdate} show={showUpdateModal}/>}
+                <td onClick={() => handleshowDeleteModal(ticket.ticket_id)}>
+                  <a href="" onClick={(e)=> e.preventDefault()} title="delete">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width='30' height='30' > 
+                    <g>
+                      <path d="M17 6h5v2h-2v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8H2V6h5V3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v3zm1 2H6v12h12V8zm-9 3h2v6H9v-6zm4 0h2v6h-2v-6zM9 4v2h6V4H9z" fill="red"></path> 
                     </g> 
                   </svg>
-                </a>
-              </td>
-              </tr>
+                  </a>
+                </td>
+                {showDeleteModal && clickedId===ticket.ticket_id && <ModalComponent title='Delete Ticket' label={`Are you sure to delete '${ticket.ticket_title}'?`} onYes={onDelete} onCancel={onCancelDelete} show={showDeleteModal}/>}
+                </tr>
             )
           })}
         </tbody>
@@ -201,9 +231,7 @@ function Tickets() {
     </>
   );
 }
-
 export default Tickets;
-
 
 export const ModalComponent = ({ title, label, onYes, onCancel, show }) => {
 
@@ -230,7 +258,7 @@ export const ModalComponent = ({ title, label, onYes, onCancel, show }) => {
             style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}
           >
             <div className="modal-dialog modal-dialog-centered" style={style}>
-              <div className="modal-header" style={{padding: '10px'}} >
+              <div className="modal-header" style={{padding: '10px', border: '1px solid gray', backgroundColor: '#963634', color: 'white'}} >
                 <h5 className="modal-title">{title}</h5>
                 <svg
                     style={{ position: 'absolute', top: '5px', right: '5px', cursor: 'pointer', border:'1px solid gray' }}
@@ -238,14 +266,14 @@ export const ModalComponent = ({ title, label, onYes, onCancel, show }) => {
                     width="30" height="30" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"
                     onClick={onCancel}
                 >
-                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" fill="blue"></path>
+                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" ></path>
                 </svg>
               </div>
-              <div className="modal-body" style={{paddingLeft: '3%'}}>
+              <div className="modal-body" style={{padding: '3%'}}>
                 <h6 style={{ color: 'black' }}>{label}</h6>
               </div>
               <div className="modal-footer" style={{ display: 'flex', justifyContent: 'space-between', position:'absolute', bottom: '10px', right: '10%', alignItems:'center', textAlign:'center'}}>
-                <button type="button" className="btn btn-primary" onClick={onYes} style={{ flex: '1 0 auto', backgroundColor:'blue', marginRight:'10%' }}>Yes</button>
+                <button type="button" className="btn btn-primary" onClick={onYes} style={{ flex: '1 0 auto', backgroundColor:'#963634', marginRight:'10%' }}>Yes</button>
                 <button type="button" className="btn btn-primary" onClick={onCancel} style={{ flex: '1 0 auto', backgroundColor: '#929292' }}>Cancel</button>
               </div>
             </div>
