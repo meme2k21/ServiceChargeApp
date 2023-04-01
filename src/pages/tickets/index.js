@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import CreateTicket from "../ticket/create";
+import { ClassNameConfigurator } from "@mui/base";
 
 export const getStaticProps = async () => {
   const res = await fetch("https://jsonplaceholder.typicode.com/users");
@@ -59,6 +60,7 @@ function Tickets() {
   }
 
   const onUpdate = () => {
+    handleUpdateTicket()
     onCancelUpdate();
   }
 
@@ -205,7 +207,7 @@ function Tickets() {
                     {ticket.ticket_status}
                   </a>
                 </td>
-                {showUpdateModal && clickedId===ticket.ticket_id && <ModalEdit title='Update Ticket' label={`Are you sure to update '${ticket.ticket_title}'?`} onYes={onUpdate} onCancel={onCancelUpdate} show={showUpdateModal}/>}
+                {showUpdateModal && clickedId===ticket.ticket_id && <ModalEdit title='Update Ticket' label={`Are you sure to update '${ticket.ticket_title}'?`} onYes={onUpdate} onCancel={onCancelUpdate} show={showUpdateModal} row={ticket}/>}
                 <td onClick={() => handleshowDeleteModal(ticket.ticket_id)}>
                   <a href="" onClick={(e)=> e.preventDefault()} title="delete">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width='30' height='30' > 
@@ -281,7 +283,18 @@ export const ModalComponent = ({ title, label, onYes, onCancel, show }) => {
   );
 };
 
-export const ModalEdit = ({ title, label, onYes, onCancel, show }) => {
+const handleUpdateTicket = ({ticketId}) => {
+  axios.put("http://localhost:8080/ticket/update/"+ticketId).then(()=>{
+    console.log("ticket updated successfully").catch((error)=>{
+      console.log("Error" + error)
+    })
+  })
+}
+
+
+
+
+export const ModalEdit = ({ title, label, onYes, onCancel, show, row }) => {
 
   const style = {
     position: 'absolute',
@@ -293,7 +306,7 @@ export const ModalEdit = ({ title, label, onYes, onCancel, show }) => {
     border: '2px solid #000',
     boxShadow: 24,
     backgroundColor:'white', 
-    height:'25%'
+    height:'50%'
   };
 
   return (
@@ -319,9 +332,15 @@ export const ModalEdit = ({ title, label, onYes, onCancel, show }) => {
               </div>
               <div className="modal-body" style={{padding: '3%'}}>
                 <h6 style={{ color: 'black' }}>{label}</h6>
-              </div>
+                <div>Id: {row.ticket_id}</div>
+                  <div>Date: {row.date_created}</div>
+                </div>
+                <div>Title: {row.ticket_title}</div>
+                <div>Description: {row.ticket_description}</div>
+                <div>Status: <input type="input"/></div>
+                <div>Owner Id: {row.ticket_owner}</div>
               <div className="modal-footer" style={{ display: 'flex', justifyContent: 'space-between', position:'absolute', bottom: '10px', right: '10%', alignItems:'center', textAlign:'center'}}>
-                <button type="button" className="btn btn-primary" onClick={onYes} style={{ flex: '1 0 auto', backgroundColor:'#963634', marginRight:'10%' }}>Yes</button>
+                <button type="button" className="btn btn-primary" onClick={()=>{handleUpdateTicket()}} style={{ flex: '1 0 auto', backgroundColor:'#963634', marginRight:'10%' }}>Yes</button>
                 <button type="button" className="btn btn-primary" onClick={onCancel} style={{ flex: '1 0 auto', backgroundColor: '#929292' }}>Cancel</button>
               </div>
             </div>
