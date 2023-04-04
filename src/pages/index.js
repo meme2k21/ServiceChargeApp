@@ -202,7 +202,7 @@ function dashboard() {
           onSelectedRowsChange={handleChange}
           onRowClicked={handleRow}
         />
-        {showViewTicketModal && <ShowTicketModal show={showViewTicketModal} onYes={onShow} onCancel={onCancelShow} row={selectedRow} />}
+        {showViewTicketModal && <ShowTicketModal show={showViewTicketModal} onCancel={onCancelShow} row={selectedRow} />}
       </div>
     </div>
   );
@@ -211,20 +211,34 @@ function dashboard() {
 export default dashboard;
 
 
-export function ShowTicketModal({show, onYes, onCancel, row}) {
+export function ShowTicketModal({show, onCancel, row}) {
   const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '80%',
-    maxWidth:'500px',
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    backgroundColor:'white'
+    position: 'absolute', 
+    top: '50%', 
+    left: '50%', 
+    transform: 'translate(-50%, -50%)', 
+    width: '80%', 
+    maxWidth:'600px', 
+    bgcolor: 'background.paper', 
+    border: '2px solid #000', 
+    boxShadow: 24, 
+    backgroundColor:'white',
+    minWidth:'418px'
   };
 
+    const date = new Date(row.date_created);
+
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const mm = months[date.getMonth()]; // Returns month name from the array
+    const dd = date.getDate();
+    const yyyy = date.getFullYear();
+    const formattedTime = date.toLocaleString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true
+    });
+
+    const displayDate = `${mm} ${dd} ${yyyy} (${formattedTime})`;
   return (
           <Modal
             open={show}
@@ -232,11 +246,10 @@ export function ShowTicketModal({show, onYes, onCancel, row}) {
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
             className="modal d-block"
-            style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}
           >
             <div className="modal-dialog modal-dialog-centered" style={style}>
               <div className="modal-header" style={{padding: '10px', backgroundColor:'#963634', color:'white'}} >
-                <h5 className="modal-title" style={{fontWeight: 'bold'}}>{row.ticket_title}</h5>
+                <h5 className="modal-title" style={{fontWeight: 'bold'}}>Ticket View</h5>
                 <svg
                     style={{ position: 'absolute', top: '5px', right: '5px', cursor: 'pointer', border:'1px solid gray' }}
                     xmlns="http://www.w3.org/2000/svg"
@@ -246,17 +259,68 @@ export function ShowTicketModal({show, onYes, onCancel, row}) {
                   <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
                 </svg>
               </div>
-              <div className="modal-body" style={{ margin:'10px'}}>
-                <div style={{display:'flex', justifyContent:'space-between', paddingRight:'10px', marginBottom:'10px'}}>
-                  <div>Id: {row.ticket_id}</div>
-                  <div>Date: {row.date_created}</div>
+              <div className="modal-body text-center" style={{ margin:'10px'}}>
+                <p style={{fontWeight:'bold'}}>ALLIANCE SOFTWARE INC.<br/></p>
+                <p style={{fontSize:'12px'}}>
+                  14th Floor, Buildcomm Center, Sumilon Road, Cebu Business Park<br/>
+                  Cebu City, Cebu, Philippines 6000<br/>
+                  <b>Contact No.:</b>&nbsp;+63-32-261-1705
+                </p>
+                <br/>
+                <p><b>OFFICIAL TICKET</b></p>
+                <br/>
+                <table className="CancelAllStyling">
+                <tr className="CancelAllStyling">
+                  <td className="CancelAllStyling" style={{width:'20%', fontSize:'14px'}}>Reference No. </td>
+                  <td className="CancelAllStyling" style={{borderBottom:'1px solid black', paddingLeft:'10px', width:'30%', color: 'red'}}>{row.ticket_id}</td>
+                  <td className="CancelAllStyling" style={{width:'13%', paddingLeft:'4%', fontSize:'14px'}}>Date: </td>
+                  <td className="CancelAllStyling" style={{borderBottom:'1px solid black', textAlign:'center', width:'30%', minWidth:'187px'}}>{displayDate}</td>
+                </tr>
+                <br/>
+                <tr>
+                  <td className="CancelAllStyling" style={{width:'10%', fontSize:'14px'}}>Owner: </td>
+                  <td colSpan={3} className="CancelAllStyling" style={{borderBottom:'1px solid black', width:'30%', paddingLeft:'10px'}}>{row.ticket_owner}</td>
+                </tr>
+                <tr>
+                  <td className="CancelAllStyling" style={{width:'10%', fontSize:'14px'}}>Title: </td>
+                  <td colSpan={3} className="CancelAllStyling" style={{borderBottom:'1px solid black', width:'30%', paddingLeft:'10px'}}>{row.ticket_title}</td>
+                </tr>
+                <tr>
+                  <td className="CancelAllStyling" style={{width:'10%', fontSize:'14px'}}>Description: </td>
+                  <td colSpan={3} className="CancelAllStyling" style={{borderBottom:'1px solid black', width:'30%', paddingLeft:'10px', wordBreak:'break-all', wordWrap:'break-word' }}>{row.ticket_description}</td>
+                </tr>
+                <br/><br/>
+                <tr>
+                  <td colSpan={4} className="CancelAllStyling" style={{borderBottom:'2px solid black', width:'100%' }}></td>
+                </tr>
+                <br/><br/><br/>
+                <tr>
+                  <td colSpan={2}></td>
+                  <td colSpan={2} className="CancelAllStyling" style={{width:'20%', borderTop: '1px solid black', textAlign:'center', fontSize:'14px'}}>Owner's Signature</td>
+                </tr>
+                </table>
                 </div>
-                <div>Title: {row.ticket_title}</div>
-                <div>Description: {row.ticket_description}</div>
-                <div>Status: {row.ticket_status}</div>
-                <div>Owner Id: {row.ticket_owner}</div>
-              </div>
             </div>
           </Modal>
   );
 }
+
+{/* <div style={{display:'flex', justifyContent:'space-between' }}>
+                  <div>No. <label style={{textDecoration: 'underline' }}>&nbsp;&nbsp;{row.ticket_id}&nbsp;&nbsp;</label></div>
+                  <div>Date: <label style={{textDecoration: 'underline' }}>&nbsp;&nbsp;{displayDate}&nbsp;&nbsp;</label></div>
+                </div>
+                <div>Owner: <label style={{textDecoration: 'underline' }}>&nbsp;&nbsp;{row.ticket_owner}&nbsp;&nbsp;</label></div>
+                <div style={{padding:'20px'}}>
+                  <div style={{ display: 'flex' }}>
+                    <div style={{ flexGrow: 1 }}>Title:&nbsp;&nbsp;</div>
+                    <div><label style={{ textAlign: 'right' }}>{row.ticket_title}</label></div>
+                  </div>
+                  <div style={{ display: 'flex' }}>
+                    <div style={{ flexGrow: 1 }}>Description:&nbsp;&nbsp;</div>
+                    <div><label style={{ textAlign: 'right', wordBreak:'break-all', wordWrap:'break-word' }}>{row.ticket_description}</label></div>
+                  </div>
+                  <div style={{ display: 'flex' }}>
+                    <div style={{ flexGrow: 1 }}>Status:&nbsp;&nbsp;</div>
+                    <div><label style={{ textAlign: 'right' }}>{row.ticket_status}</label></div>
+                  </div>
+                </div> */}
