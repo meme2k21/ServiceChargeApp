@@ -35,7 +35,7 @@ const Login = () => {
       .then((response) => {
         // authentication successful, do something here
         if (response.status === 200 && response.data !== "") {
-          router.push("/dashboard");
+          router.push("/");
           console.log("Success fetch user");
           // setUser({ loggedIn: true, data: response.data });
         } else {

@@ -3,7 +3,6 @@ import Link from "next/link";
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import axios from "axios";
 import DataTable from "react-data-table-component";
-import jsPDF from "jspdf";
 import "jspdf-autotable";
 import {
   FaLock,
@@ -73,31 +72,53 @@ function reports() {
     []
   );
 
-  const exportPDF = () => {
-    const unit = "pt";
-    const size = "A4"; // Use A1, A2, A3 or A4
-    const orientation = "landscape"; // portrait or landscape
+  // const exportPDF = () => {
+  //   const unit = "pt";
+  //   const size = "A4"; // Use A1, A2, A3 or A4
+  //   const orientation = "landscape"; // portrait or landscape
 
-    const marginLeft = 40;
-    const doc = new jsPDF(orientation, unit, size);
+  //   const marginLeft = 40;
+  //   const doc = new jsPDF(orientation, unit, size);
 
-    doc.setFontSize(15);
+  //   doc.setFontSize(15);
 
-    const title = "Tickets Report";
-    const headers = [["TITLE", "DESCRIPTION", "DATE FILED", "STATUS", "OWNER"]];
+  //   const title = "Tickets Report";
+  //   const headers = [["TITLE", "DESCRIPTION", "DATE FILED", "STATUS", "OWNER"]];
 
-    const data = tickets.map(ticket=> [ticket.ticket_title, ticket.ticket_description, ticket.date_created, ticket.ticket_status, ticket.ticket_owner]);
+  //   const data = tickets.map(ticket=> [ticket.ticket_title, ticket.ticket_description, ticket.date_created, ticket.ticket_status, ticket.ticket_owner]);
 
-    let content = {
-      startY: 50,
-      head: headers,
-      body: data
-    };
+  //   let content = {
+  //     startY: 50,
+  //     head: headers,
+  //     body: data
+  //   };
 
-    doc.text(title, marginLeft, 40);
-    doc.autoTable(content);
-    doc.save("tickets_report.pdf");
-  }
+  //   doc.text(title, marginLeft, 40);
+  //   doc.autoTable(content);
+  //   doc.save("tickets_report.pdf");
+  // }
+
+  const exportCSV = () => {
+    const headers = ['TITLE', 'DESCRIPTION', 'DATE FILED', 'STATUS', 'OWNER'];
+  
+    const data = tickets.map(ticket => [
+      ticket.ticket_title,
+      ticket.ticket_description,
+      ticket.date_created,
+      ticket.ticket_status,
+      ticket.ticket_owner,
+    ]);
+  
+    const csv = [headers, ...data].map(row => row.join(',')).join('\n');
+    const csvBlob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const csvUrl = URL.createObjectURL(csvBlob);
+  
+    const link = document.createElement('a');
+    link.href = csvUrl;
+    link.setAttribute('download', 'tickets_report.csv');
+    link.click();
+  };
+  
 
   const handleSelectChange = (event) => {
     setTicketYearCreated(event.target.value);
@@ -117,7 +138,7 @@ function reports() {
             <option>2022</option>
           </select>
           {/* TO PRINT REPORTS */}
-          <a href="" onClick={(e)=> {e.preventDefault(), exportPDF()}}>
+          <a href="" onClick={(e) => {e.preventDefault(), exportCSV()}}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width={50} height={50} right='10px'>
               <rect width="256" height="256" fill="none"/>
               <rect x="24" y="128" width="208" height="80" rx="8" opacity="0.2"/>
