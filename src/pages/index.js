@@ -38,61 +38,57 @@ function dashboard() {
   const columns = useMemo(
     () => [
       {
+        id: 1,
         name: "Ticket Number",
         selector: (row) => row.ticket_id,
         sortable: true,
+        reorder: true,
         grow: 2,
       },
       {
+        id: 2,
         name: "Ticket Subject",
         selector: (row) => row.ticket_title,
         sortable: true,
+        reorder: true
       },
       {
+        id: 3,
         name: "Ticket Description",
         selector: (row) => row.ticket_description,
         sortable: true,
+        reorder: true,
         right: true,
       },
       {
+        id: 4,
         name: "Date Created",
         selector: (row) => row.date_created,
         sortable: true,
+        reorder: true,
         right: true,
       },
       {
+        id: 5,
         name: "Status",
         selector: (row) => row.ticket_status,
         sortable: true,
+        reorder: true,
         right: true,
       },
-      // {
-      //   cell: (row) => (
-      //     <button className="bg-red-700" onClick={() => handleButtonClick(row)}>
-      //       Edit
-      //     </button>
-      //   ),
-      //   ignoreRowClick: true,
-      //   allowOverflow: true,
-      //   button: true,
-      // },
-      // {
-      //   name: "Delete",
-      //   cell: (row) => (
-      //     <button className="bg-red-700" onClick={() => handleDeleteRow(row)}>
-      //       Delete
-      //     </button>
-      //   ),
-      //   ignoreRowClick: true,
-      //   allowOverflow: true,
-      //   button: true,
-      // },
     ],
     []
   );
+
   const sortedData = tickets?.sort(
     (a, b) => new Date(b.date_created) - new Date(a.date_created)
   );
+
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    selectAllRowsItemText: "ALL"
+  };
+  
 
   //Modal Create component
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -192,16 +188,19 @@ function dashboard() {
             </a>
           </div>
         </div>
-
+        <br/>
+        <div style={{ overflowY: "scroll" }}>
         <DataTable
-          title="Aging Tickets"
+          title='Tickets'
           data={sortedData}
           columns={columns}
-          selectableRows
           pagination
+          defaultSortFieldId={1}
           onSelectedRowsChange={handleChange}
           onRowClicked={handleRow}
+          paginationStyle={{ position: "absolute", bottom: "20px", right: "20px" }}
         />
+        </div>
         {showViewTicketModal && <ShowTicketModal show={showViewTicketModal} onCancel={onCancelShow} row={selectedRow} />}
       </div>
     </div>
@@ -267,7 +266,7 @@ export function ShowTicketModal({show, onCancel, row}) {
                   <b>Contact No.:</b>&nbsp;+63-32-261-1705
                 </p>
                 <br/>
-                <p><b>OFFICIAL TICKET</b></p>
+                <p style={{fontSize:'24px', fontWeight:'bold'}}>OFFICIAL TICKET</p>
                 <br/>
                 <table className="CancelAllStyling">
                 <tr className="CancelAllStyling">
