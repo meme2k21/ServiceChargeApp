@@ -12,10 +12,10 @@ const LOGIN_URL = "/login";
 //   baseURL: "http://localhost:3500",
 // });
 
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const router = useRouter();
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -35,12 +35,10 @@ const Login = () => {
       .then((response) => {
         // authentication successful, do something here
         if (response.status === 200 && response.data !== "") {
-          router.push("/");
+          router.push("/dashboard");
           console.log("Success fetch user");
-          // setUser({ loggedIn: true, data: response.data });
         } else {
           console.log("Fail fetch user");
-          // setUser({ loggedIn: false });
         }
       })
       .catch((error) => {

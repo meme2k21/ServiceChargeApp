@@ -158,7 +158,6 @@ function reports() {
             data={tickets}
             columns={columns}
             defaultSortFieldId={1}
-            //selectableRows
             pagination={true}
             paginationComponentOptions={{selectAllRowsItem: true, selectAllRowsItemText:'All' }}
             paginationStyle={{ position: "absolute", bottom: "20px", right: "20px" }}
