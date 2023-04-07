@@ -3,11 +3,8 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
 import CreateTicket from "../ticket/create";
+import { Button, Modal } from 'react-bootstrap';
 
 export const getStaticProps = async () => {
   const res = await fetch("https://jsonplaceholder.typicode.com/users");
@@ -331,210 +328,116 @@ function Tickets() {
 }
 export default Tickets;
 
-export const ModalComponent = ({ title, label, onYes, onCancel, show }) => {
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    backgroundColor: "white",
-    height: "25%",
-  };
+export function ModalComponent({ title, label, onYes, onCancel, show }) {
+  const style = { position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 400, bgcolor: "background.paper", border: "2px solid #000", boxShadow: 24, backgroundColor: "white", height: "25%" };
 
-  return (
-    <Modal
-      open={show}
-      onClose={onCancel}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-      className="modal d-block"
-      style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}
-    >
-      <div className="modal-dialog modal-dialog-centered" style={style}>
-        <div
-          className="modal-header"
-          style={{
-            padding: "10px",
-            border: "1px solid gray",
-            backgroundColor: "#963634",
-            color: "white",
-          }}
-        >
-          <h5 className="modal-title">{title}</h5>
+   return (
+    <Modal show={show} onHide={onCancel}>
+      <div>
+        <Modal.Header style={{padding: '10px', backgroundColor:'#963634', color:'white'}}>
+          <Modal.Title style={{fontWeight: 'bold'}}>{title}</Modal.Title>
           <svg
-            style={{
-              position: "absolute",
-              top: "5px",
-              right: "5px",
-              cursor: "pointer",
-              border: "1px solid gray",
-            }}
-            xmlns="http://www.w3.org/2000/svg"
-            width="30"
-            height="30"
-            fill="currentColor"
-            className="bi bi-x"
-            viewBox="0 0 16 16"
-            onClick={onCancel}
-          >
-            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
-          </svg>
-        </div>
-        <div className="modal-body" style={{ padding: "3%" }}>
+                style={{ position: 'absolute', top: '15px', right: '15px', cursor: 'pointer', border:'1px solid gray' }}
+                xmlns="http://www.w3.org/2000/svg"
+                width="30" height="30" fill="currentColor" className="bi bi-x" viewBox="0 0 16 16"
+                onClick={onCancel}
+            >
+              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
+            </svg>
+        </Modal.Header>
+        <Modal.Body className="text-center" style={{ margin:'10px'}}>
           <h6 style={{ color: "black" }}>{label}</h6>
-        </div>
-        <div
-          className="modal-footer"
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            position: "absolute",
-            bottom: "10px",
-            right: "10%",
-            alignItems: "center",
-            textAlign: "center",
-          }}
-        >
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={onYes}
-            style={{
-              flex: "1 0 auto",
-              backgroundColor: "#963634",
-              marginRight: "10%",
-            }}
-          >
+        </Modal.Body>
+        <Modal.Footer style={{ display:'flex' }}>
+          <Button variant="primary" style={{backgroundColor:'#963634', border:'none' }} onClick={onYes} >
             Yes
-          </button>
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={onCancel}
-            style={{ flex: "1 0 auto", backgroundColor: "#929292" }}
-          >
+          </Button>
+          <Button variant="secondary" onClick={onCancel}>
             Cancel
-          </button>
-        </div>
+          </Button>
+        </Modal.Footer>
       </div>
     </Modal>
-  );
-};
+   );
+}
+
 
 // const handleEditTicketStatus = () => {};
 
-export const ModalEdit = ({ title, label, onYes, onCancel, show, row }) => {
+export function ModalEdit({ title, label, onYes, onCancel, show, row }) {
   const [ticket_status, setTicket_status] = useState(row.ticket_status);
+
+  const date = new Date(row.date_created);
+
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const mm = months[date.getMonth()]; // Returns month name from the array
+  const dd = date.getDate();
+  const yyyy = date.getFullYear();
+  const formattedTime = date.toLocaleString('en-US', {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true
+  });
+
+  const displayDate = `${mm} ${dd} ${yyyy} (${formattedTime})`;
 
   function handleChange(event) {
     setTicket_status(event.target.value);
   }
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    backgroundColor: "white",
-    height: "35%",
-  };
-
-  return (
-    <Modal
-      open={show}
-      onClose={onCancel}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-      className="modal d-block"
-      style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}
-    >
-      <div className="modal-dialog modal-dialog-centered" style={style}>
-        <div
-          className="modal-header"
-          style={{
-            padding: "10px",
-            border: "1px solid gray",
-            backgroundColor: "#963634",
-            color: "white",
-          }}
-        >
-          <h5 className="modal-title">{title}</h5>
+   return (
+    <Modal show={show} onHide={onCancel}>
+      <div>
+        <Modal.Header style={{padding: '10px', backgroundColor:'#963634', color:'white'}}>
+          <Modal.Title style={{fontWeight: 'bold'}}>{title}</Modal.Title>
           <svg
-            style={{
-              position: "absolute",
-              top: "5px",
-              right: "5px",
-              cursor: "pointer",
-              border: "1px solid gray",
-            }}
-            xmlns="http://www.w3.org/2000/svg"
-            width="30"
-            height="30"
-            fill="currentColor"
-            className="bi bi-x"
-            viewBox="0 0 16 16"
-            onClick={onCancel}
-          >
-            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
-          </svg>
-        </div>
-        <div className="modal-body" style={{ padding: "3%" }}>
-          <div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                paddingRight: "10px",
-                marginBottom: "10px",
-              }}
+                style={{ position: 'absolute', top: '15px', right: '15px', cursor: 'pointer', border:'1px solid gray' }}
+                xmlns="http://www.w3.org/2000/svg"
+                width="30" height="30" fill="currentColor" className="bi bi-x" viewBox="0 0 16 16"
+                onClick={onCancel}
             >
-              <div>Id: {row.ticket_id}</div>
-              <div>Date: {row.date_created}</div>
-            </div>
-            <div>Title: {row.ticket_title}</div>
-            <div>
-              Description:
-              {row.ticket_description}
-            </div>
-            <div>
-              {/* Drop down list for ticket status */}
-              <label htmlFor="status">Status:</label>
-              <select id="status" value={ticket_status} onChange={handleChange}>
-                <option value="case-filed">Case filed</option>
-                <option value="case-processing">Case processing</option>
-                <option value="invoice-examination">Invoice Examination</option>
-                <option value="payment-verification">
-                  Payment Verification
-                </option>
-                <option value="invoice-approval">Invoice Approval</option>
-              </select>
-            </div>
-            <div>Issued by: {row.ticket_owner}</div>
-          </div>
-        </div>
-        <div
-          className="modal-footer"
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            position: "absolute",
-            bottom: "10px",
-            right: "10%",
-            alignItems: "center",
-            textAlign: "center",
-          }}
-        >
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={() => {
+              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
+            </svg>
+        </Modal.Header>
+        <Modal.Body style={{ padding: "3%" }}>
+        <table className="CancelAllStyling">
+              <tr className="CancelAllStyling">
+                <td className="CancelAllStyling" style={{fontSize:'14px'}}>Ticket No. </td>
+                <td className="CancelAllStyling" style={{borderBottom:'1px solid black', paddingLeft:'10px', color: 'red'}}>{row.ticket_id}</td>
+                <td className="CancelAllStyling" style={{paddingLeft:'4%', fontSize:'14px'}}>Date Requested: </td>
+                <td className="CancelAllStyling" style={{borderBottom:'1px solid black', textAlign:'center', minWidth:'187px'}}>{displayDate}</td>
+              </tr>
+              <br/>
+              <tr>
+                <td className="CancelAllStyling" style={{fontSize:'14px'}}>Title: </td>
+                <td colSpan={3} className="CancelAllStyling" style={{borderBottom:'1px solid black', paddingLeft:'10px'}}>{row.ticket_title}</td>
+              </tr>
+              <tr>
+                <td className="CancelAllStyling" style={{fontSize:'14px'}}>Description: </td>
+                <td colSpan={3} className="CancelAllStyling" style={{borderBottom:'1px solid black', paddingLeft:'10px', wordBreak:'break-all', wordWrap:'break-word' }}>{row.ticket_description}</td>
+              </tr>
+              <tr>
+                <td className="CancelAllStyling" style={{fontSize:'14px'}}>Status: </td>
+                <td colSpan={3} className="CancelAllStyling" style={{borderBottom:'1px solid black', paddingLeft:'7px'}}>
+                  <select id="status" value={ticket_status} onChange={handleChange} style={{color:'#963634', width:'100%'}}>
+                    <option disabled style={{fontStyle:'italic'}}>{ticket_status}</option>
+                    <option value="case-filed">Pending</option>
+                    <option value="case-filed">Case filed</option>
+                    <option value="case-processing">Case processing</option>
+                    <option value="invoice-examination">Invoice Examination</option>
+                    <option value="payment-verification">Payment Verification</option>
+                    <option value="invoice-approval">Invoice Approval</option>
+                  </select>
+              </td>
+              </tr>
+              <tr>
+                <td className="CancelAllStyling" style={{fontSize:'14px'}}>Issued by: </td>
+                <td colSpan={3} className="CancelAllStyling" style={{borderBottom:'1px solid black', paddingLeft:'10px', wordBreak:'break-all', wordWrap:'break-word' }}>{row.ticket_owner}</td>
+              </tr>
+              <br/>
+            </table>
+        </Modal.Body>
+        <Modal.Footer style={{ display:'flex' }}>
+          <Button variant="primary" style={{backgroundColor:'#963634', border:'none' }} onClick={() => {
               axios
                 .put("http://localhost:8080/ticket/update/" + row.ticket_id, {
                   ...row,
@@ -547,25 +450,14 @@ export const ModalEdit = ({ title, label, onYes, onCancel, show, row }) => {
                   console.error("Error updating ticket:", error);
                 });
               onYes();
-            }}
-            style={{
-              flex: "1 0 auto",
-              backgroundColor: "#963634",
-              marginRight: "10%",
-            }}
-          >
+            }} >
             Update
-          </button>
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={onCancel}
-            style={{ flex: "1 0 auto", backgroundColor: "#929292" }}
-          >
+          </Button>
+          <Button variant="secondary" onClick={onCancel}>
             Cancel
-          </button>
-        </div>
+          </Button>
+        </Modal.Footer>
       </div>
     </Modal>
-  );
-};
+   );
+}

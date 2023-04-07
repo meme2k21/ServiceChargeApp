@@ -50,7 +50,7 @@ function ForgotPassword() {
                 </div>
                 <Link
                   href="/forgotpassword/code"
-                  className="bg-red-700 text-white p-2 rounded-sm w-full font-semibold hover:bg-white hover:text-red-700 mb-2 text-lg"
+                  className="bg-red-700 text-white p-2 rounded-sm w-full font-semibold hover:bg-white hover:text-red-700 mb-2 text-lg text-decoration-none"
                 >
                   Submit
                 </Link>

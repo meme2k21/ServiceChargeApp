@@ -353,7 +353,7 @@ export function ShowTicketModal({show, onCancel, row}) {
               Create conforme slip
             </Button>
           ): null}
-          {showConformeModal && <ConformeSlipModal show={showConformeModal} onCancel={() => {setShowConformeModal(false); onCancel()}} row={row}/>}
+          {showConformeModal && <ConformeSlipModal show={showConformeModal} onCancel={() => {setShowConformeModal(false); onCancel()}} row={row}/> }
           
         </Modal.Footer>
       </div>
