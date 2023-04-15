@@ -12,10 +12,10 @@ const LOGIN_URL = "/login";
 //   baseURL: "http://localhost:3500",
 // });
 
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const router = useRouter();
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -37,10 +37,8 @@ const Login = () => {
         if (response.status === 200 && response.data !== "") {
           router.push("/dashboard");
           console.log("Success fetch user");
-          // setUser({ loggedIn: true, data: response.data });
         } else {
           console.log("Fail fetch user");
-          // setUser({ loggedIn: false });
         }
       })
       .catch((error) => {
@@ -55,35 +53,17 @@ const Login = () => {
         <title>Login</title>
         <meta name="keywords" content="dashboard" />
       </Head>
-      <main className="flex flex-col items-center justify-center w-full px-20 text-center">
-        <div className="bg-white rounded-2xl shadow-2xl flex w-full max-w-4xl">
-          {/* LOGO SECTION */}
-          <div className="w-1/2 bg-white rounded-l-lg p-10">
-            <p className="font-semibold text-left">powered by</p>
-            <Image
-              style={{ borderRadius: 5 }}
-              src="/logo-alliance-comp.png"
-              width={200}
-              height={200}
-              alt="Logo Alliance"
-            />
-            {/* <div className="w-full h-full bg-gray-400">Some pic</div> */}
-            <Image
-              style={{ borderRadius: 5 }}
-              src="/login-pic.jpg"
-              width={500}
-              height={500}
-            />
-          </div>
+      <main className="flex flex-col items-center justify-center w-full px-20 text-center" style={{marginBottom:'-5%'}} >
+        <div className=" rounded-2xl shadow-2xl flex w-full max-w-4xl border border-white">
           {/* LOGIN SECTION */}
-          <div className="w-1/2 p-5 rounded-r-lg bg-gray-100">
-            <div className="text-left mt-10 mb-5">
-              <h3 className="font-bold text-lg">SERVICE CHARGE 5</h3>
+          <div className="w-1/2 " style={{borderTopLeftRadius:'5%', borderBottomLeftRadius:'5%'}}>
+            <div className="text-left mt-10 mb-5 text-white">
+              <h2 className="font-bold">Login to Your Account</h2>
               <p className="text-xs">
                 Please input your credentials to proceed
               </p>
             </div>
-            <div className="py-10">
+            <div className="">
               {/* <h2 className="text-3xl font-bold text-red-700">Sign in</h2> */}
               {/* <div className="border-2 w-10 border-red-700 inline-block mb-2"></div> */}
               <div className="flex flex-col items-center">
@@ -137,7 +117,30 @@ const Login = () => {
                 >
                   LOGIN
                 </Link> */}
-                <div className="text-sm">
+              </div>
+            </div>
+            <p className="mb-2"></p>
+          </div>
+          {/* LOGO SECTION */}
+          <div className=" w-1/2 p-10" style={{borderTopRightRadius:"3%", borderBottomRightRadius:'3%', 
+              backgroundColor:'white' 
+          }}>
+            <p className="font-semibold text-left">powered by</p>
+            <Image
+              style={{ borderRadius: 5, opacity:1 }}
+              src="/logo-alliance-comp.png"
+              width={200}
+              height={200}
+              alt="Logo Alliance"
+            />
+            {/* <div className="w-full h-full bg-gray-400">Some pic</div> */}
+            <Image
+              style={{ borderRadius: 5 }}
+              src="/login-pic.jpg"
+              width={500}
+              height={500}
+            />
+            <div className="text-sm">
                   <p>
                     Don't have an account?{" "}
                     <Link href="#" className="text-red-700">
@@ -145,9 +148,6 @@ const Login = () => {
                     </Link>
                   </p>
                 </div>
-              </div>
-            </div>
-            <p className="mb-2"></p>
           </div>
         </div>
       </main>
