@@ -37,6 +37,7 @@ const Login = () => {
         if (response.status === 200 && response.data !== "") {
           router.push("/dashboard");
           console.log("Success fetch user");
+          localStorage.setItem('email', credentials.email);
         } else {
           console.log("Fail fetch user");
         }

@@ -229,75 +229,6 @@ export function ShowTicketModal({show, onCancel, row}) {
   }
 
    return (
-    // <Modal
-    //   open={show}
-    //   onClose={onCancel}
-    //   aria-labelledby="modal-modal-title"
-    //   aria-describedby="modal-modal-description"
-    //   className="modal d-block"
-    // >
-    //   <div className="modal-dialog modal-dialog-centered" style={style}>
-    //     <div className="modal-header" style={{padding: '10px', backgroundColor:'#963634', color:'white'}} >
-    //       <h5 className="modal-title" style={{fontWeight: 'bold'}}>Single Ticket View</h5>
-    //       <svg
-    //           style={{ position: 'absolute', top: '5px', right: '5px', cursor: 'pointer', border:'1px solid gray' }}
-    //           xmlns="http://www.w3.org/2000/svg"
-    //           width="30" height="30" fill="currentColor" className="bi bi-x" viewBox="0 0 16 16"
-    //           onClick={onCancel}
-    //       >
-    //         <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
-    //       </svg>
-    //     </div>
-    //     <div className="modal-body text-center" style={{ margin:'10px'}}>
-    //       <p style={{fontWeight:'bold'}}>ALLIANCE SOFTWARE INC.<br/></p>
-    //       <p style={{fontSize:'12px'}}>
-    //         14th Floor, Buildcomm Center, Sumilon Road, Cebu Business Park<br/>
-    //         Cebu City, Cebu, Philippines 6000<br/>
-    //         <b>Contact No.:</b>&nbsp;+63-32-261-1705
-    //       </p>
-    //       <br/>
-    //       <p style={{fontSize:'24px', fontWeight:'bold'}}>OFFICIAL TICKET</p>
-    //       <br/>
-    //       <table className="CancelAllStyling">
-    //         <tr className="CancelAllStyling">
-    //           <td className="CancelAllStyling" style={{fontSize:'14px'}}>Ticket No. </td>
-    //           <td className="CancelAllStyling" style={{borderBottom:'1px solid black', paddingLeft:'10px', color: 'red'}}>{row.ticket_id}</td>
-    //           <td className="CancelAllStyling" style={{paddingLeft:'4%', fontSize:'14px'}}>Date Requested: </td>
-    //           <td className="CancelAllStyling" style={{borderBottom:'1px solid black', textAlign:'center', minWidth:'187px'}}>{displayDate}</td>
-    //         </tr>
-    //         <br/>
-    //         <tr>
-    //           <td className="CancelAllStyling" style={{fontSize:'14px'}}>Owner: </td>
-    //           <td colSpan={3} className="CancelAllStyling" style={{borderBottom:'1px solid black', paddingLeft:'10px'}}>{row.ticket_owner}</td>
-    //         </tr>
-    //         <tr>
-    //           <td className="CancelAllStyling" style={{fontSize:'14px'}}>Title: </td>
-    //           <td colSpan={3} className="CancelAllStyling" style={{borderBottom:'1px solid black', paddingLeft:'10px'}}>{row.ticket_title}</td>
-    //         </tr>
-    //         <tr>
-    //           <td className="CancelAllStyling" style={{fontSize:'14px'}}>Description: </td>
-    //           <td colSpan={3} className="CancelAllStyling" style={{borderBottom:'1px solid black', paddingLeft:'10px', wordBreak:'break-all', wordWrap:'break-word' }}>{row.ticket_description}</td>
-    //         </tr>
-    //         <tr>
-    //           <td className="CancelAllStyling" style={{fontSize:'14px'}}>Status: </td>
-    //           <td colSpan={3} className="CancelAllStyling" style={{borderBottom:'1px solid black', paddingLeft:'10px', wordBreak:'break-all', wordWrap:'break-word' }}>{row.ticket_status}</td>
-    //         </tr>
-    //         <br/><br/>
-    //         <tr>
-    //           <td colSpan={4} className="CancelAllStyling" style={{borderBottom:'2px solid black' }}></td>
-    //         </tr>
-    //         {/* <br/><br/><br/>
-    //         <tr>
-    //           <td colSpan={2}></td>
-    //           <td colSpan={2} className="CancelAllStyling" style={{width:'20%', borderTop: '1px solid black', textAlign:'center', fontSize:'14px'}}>Owner's Signature</td>
-    //         </tr> */}
-    //       </table>
-    //       <br></br>
-    //       {row.ticket_status === 'pending'? (<button onClick={() => {handleConformModal()}} >Create conforme slip</button>): null}
-    //       {showConformeModal && <ConformeSlipModal show={showConformeModal} onCancel={() => {setShowConformeModal(false); onCancel()}} row={row}/>}
-    //     </div>
-    //   </div>
-    // </Modal>
     <Modal show={show} onHide={onCancel}>
       <div>
         <Modal.Header style={{padding: '10px', backgroundColor:'#963634', color:'white'}}>
@@ -348,7 +279,7 @@ export function ShowTicketModal({show, onCancel, row}) {
             </table>
         </Modal.Body>
         <Modal.Footer style={{ display:'flex', justifyContent:'center'}}>
-          {row.ticket_status === 'pending'? (
+          {row.ticket_status === 'Pending'? (
             <Button onClick={() => {handleConformModal()}} style={{backgroundColor:'#963634', border:'none' }} >
               Create conforme slip
             </Button>

@@ -138,9 +138,9 @@ function Tickets() {
         <div style={{ display: "flex", alignItems: "center" }}>
           <select value={ticketHealth} style={{ opacity: ticketHealth === "Ticket Health" ? 0.5 : 1, border: "1px solid black", marginRight: "20px", height: "40px", fontStyle: "italic", }} >
             <option disabled>{ticketHealth}</option>
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
+            <option>Aging Tickets</option>
+            <option>Active Tickets</option>
+            <option>All Tickets</option>
           </select>
           <select value={ticketStatus} style={{ opacity: ticketStatus === "Ticket Status" ? 0.5 : 1, border: "1px solid black", marginRight: "20px", height: "40px", fontStyle: "italic", }} >
             <option disabled>{ticketStatus}</option>
