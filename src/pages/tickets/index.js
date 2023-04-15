@@ -347,14 +347,7 @@ export function ModalComponent({ title, label, onYes, onCancel, show }) {
    );
 }
 
-
 // const handleEditTicketStatus = () => {};
-
-export function ModalEdit({ title, label, onYes, onCancel, show, row }) {
-  const [ticket_status, setTicket_status] = useState(row.ticket_status);
-
-  const date = new Date(row.date_created);
-
 export const ModalEdit = ({ title, label, onYes, onCancel, show }) => {
 
   const style = {
