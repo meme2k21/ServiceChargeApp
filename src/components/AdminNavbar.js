@@ -1,14 +1,24 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 function AdminNavbar(props) {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(false);
+  const [email, getEmail] = useState(false);
 
+  let loggedin = false;
+  if(email != null | email != "")
+    loggedin = true;
+  else 
+    loggedin = false;
+  
   function handleLoginClick() {
     setIsLogin(!isLogin);
+  }
+  function handleLogOutClick() {
+    const logout = localStorage.removeItem('email');
   }
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -19,6 +29,10 @@ function AdminNavbar(props) {
 
   const isLoggedIn = props.isLoggedIn;
   const currentPage = props.currentPage;
+
+  useEffect(() => {
+    getEmail(localStorage.getItem('email'))
+  }, [])
 
   return (
     <nav className="CancelAllStyling">
@@ -55,12 +69,19 @@ function AdminNavbar(props) {
           Reports
         </Link>
 
-        {isLogin ? (
+        {loggedin ? (
+          <>
           <Link
             className={router.asPath === "/settings" ? "active-link" : ""} href="/settings" style={{textDecoration:'none'}} onClick={handleLoginClick}
           >
             Settings
           </Link>
+          <Link
+          className={router.asPath === "/login" ? "active-link" : ""} href="/login" style={{textDecoration:'none'}} onClick={handleLogOutClick}
+        >
+          Log Out
+        </Link>
+        </>
         ) : (
           <Link
             className={router.asPath === "/login" ? "active-link" : ""} href="/login" style={{textDecoration:'none'}} onClick={handleLoginClick}

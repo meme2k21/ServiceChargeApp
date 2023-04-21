@@ -52,16 +52,13 @@ function Tickets() {
   const handleUpdateModal = (id) => {
     setShowUpdateModal(true);
     console.log(showUpdateModal);
+    console.log(id);
     setClickedId(id);
   };
 
   // For update modal
 
   const onUpdate = () => {
-    // Perform Edit/Update ticket status
-    //
-    window.location.reload(); // Reload the page after successful update
-
     onCancelUpdate();
   };
 
@@ -141,9 +138,9 @@ function Tickets() {
         <div style={{ display: "flex", alignItems: "center" }}>
           <select value={ticketHealth} style={{ opacity: ticketHealth === "Ticket Health" ? 0.5 : 1, border: "1px solid black", marginRight: "20px", height: "40px", fontStyle: "italic", }} >
             <option disabled>{ticketHealth}</option>
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
+            <option>Aging Tickets</option>
+            <option>Active Tickets</option>
+            <option>All Tickets</option>
           </select>
           <select value={ticketStatus} style={{ opacity: ticketStatus === "Ticket Status" ? 0.5 : 1, border: "1px solid black", marginRight: "20px", height: "40px", fontStyle: "italic", }} >
             <option disabled>{ticketStatus}</option>
@@ -242,16 +239,7 @@ function Tickets() {
                     {ticket.ticket_status}
                   </a>
                 </td>
-                {showUpdateModal && clickedId === ticket.ticket_id && (
-                  <ModalEdit
-                    title="Update Ticket"
-                    label={`Are you sure to update '${ticket.ticket_title}'?`}
-                    onYes={() => onUpdate()}
-                    onCancel={onCancelUpdate}
-                    show={showUpdateModal}
-                    row={ticket}
-                  />
-                )}
+                {showUpdateModal && clickedId===ticket.ticket_id && <ModalEdit title='Update Ticket' label={`Are you sure to update '${ticket.ticket_title}'?`} onYes={onUpdate} onCancel={onCancelUpdate} show={showUpdateModal} row={ticket}/>}
                 <td onClick={() => handleshowDeleteModal(ticket.ticket_id)}>
                   <a href="" onClick={(e) => e.preventDefault()} title="delete">
                     <svg
@@ -361,9 +349,7 @@ export function ModalComponent({ title, label, onYes, onCancel, show }) {
    );
 }
 
-
 // const handleEditTicketStatus = () => {};
-
 export function ModalEdit({ title, label, onYes, onCancel, show, row }) {
   const [ticket_status, setTicket_status] = useState(row.ticket_status);
 
@@ -384,18 +370,19 @@ export function ModalEdit({ title, label, onYes, onCancel, show, row }) {
   function handleChange(event) {
     setTicket_status(event.target.value);
   }
-   return (
+
+  return (
     <Modal show={show} onHide={onCancel}>
       <div>
         <Modal.Header style={{padding: '10px', backgroundColor:'#963634', color:'white'}}>
           <Modal.Title style={{fontWeight: 'bold'}}>{title}</Modal.Title>
           <svg
-                style={{ position: 'absolute', top: '15px', right: '15px', cursor: 'pointer', border:'1px solid gray' }}
-                xmlns="http://www.w3.org/2000/svg"
-                width="30" height="30" fill="currentColor" className="bi bi-x" viewBox="0 0 16 16"
-                onClick={onCancel}
-            >
-              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
+          style={{ position: 'absolute', top: '15px', right: '15px', cursor: 'pointer', border:'1px solid gray' }}
+          xmlns="http://www.w3.org/2000/svg"
+          width="30" height="30" fill="currentColor" className="bi bi-x" viewBox="0 0 16 16"
+          onClick={onCancel}
+      >
+        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
             </svg>
         </Modal.Header>
         <Modal.Body style={{ padding: "3%" }}>
@@ -420,7 +407,7 @@ export function ModalEdit({ title, label, onYes, onCancel, show, row }) {
                 <td colSpan={3} className="CancelAllStyling" style={{borderBottom:'1px solid black', paddingLeft:'7px'}}>
                   <select id="status" value={ticket_status} onChange={handleChange} style={{color:'#963634', width:'100%'}}>
                     <option disabled style={{fontStyle:'italic'}}>{ticket_status}</option>
-                    <option value="case-filed">Pending</option>
+                    <option value="pending">Pending</option>
                     <option value="case-filed">Case filed</option>
                     <option value="case-processing">Case processing</option>
                     <option value="invoice-examination">Invoice Examination</option>
@@ -439,25 +426,25 @@ export function ModalEdit({ title, label, onYes, onCancel, show, row }) {
         <Modal.Footer style={{ display:'flex' }}>
           <Button variant="primary" style={{backgroundColor:'#963634', border:'none' }} onClick={() => {
               axios
-                .put("http://localhost:8080/ticket/update/" + row.ticket_id, {
-                  ...row,
-                  ticket_status,
-                })
-                .then((response) => {
-                  console.log("Ticket updated:", response?.data);
-                })
-                .catch((error) => {
-                  console.error("Error updating ticket:", error);
-                });
-              onYes();
-            }} >
-            Update
+              .put("http://localhost:8080/ticket/update/" + row.ticket_id, {
+                ...row,
+                ticket_status,
+              })
+              .then((response) => {
+                console.log("Ticket updated:", response?.data);
+              })
+              .catch((error) => {
+                console.error("Error updating ticket:", error);
+              });
+            onYes();
+          }} >
+          Update
           </Button>
           <Button variant="secondary" onClick={onCancel}>
             Cancel
-          </Button>
+            </Button>
         </Modal.Footer>
       </div>
     </Modal>
-   );
-}
+      );
+    }
