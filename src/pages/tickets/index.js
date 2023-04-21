@@ -125,7 +125,7 @@ function Tickets() {
       {/* For Ticket Search Filtering */}
       <div
         style={{
-          backgroundColor: "#D9D9D9",
+          backgroundColor: "#808080",
           paddingLeft: "10px",
           fontWeight: "bold",
           width: "100vw-10px",
@@ -137,7 +137,7 @@ function Tickets() {
       >
         Search Filter
       </div>
-      <div style={{ backgroundColor: "white", border: "5px solid white", borderColor: "#D9D9D9", paddingLeft: "10px", fontWeight: "bold", width: "100vw-10px", height: "60px", display: "flex", alignItems: "center", justifyContent: "space-between", minWidth:'628px' }} >
+      <div style={{ backgroundColor: "white", border: "5px solid #808080", borderColor: "#808080", paddingLeft: "10px", fontWeight: "bold", width: "100vw-10px", height: "60px", display: "flex", alignItems: "center", justifyContent: "space-between", minWidth:'628px' }} >
         <div style={{ display: "flex", alignItems: "center" }}>
           <select value={ticketHealth} style={{ opacity: ticketHealth === "Ticket Health" ? 0.5 : 1, border: "1px solid black", marginRight: "20px", height: "40px", fontStyle: "italic", }} >
             <option disabled>{ticketHealth}</option>
@@ -160,10 +160,10 @@ function Tickets() {
           </select>
         </div>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <button style={{ backgroundColor: "#D9D9D9", color: "black", fontSize: "16px", marginRight: "10px", height: "40px", fontStyle: "italic", }} >
+          <button style={{ backgroundColor: "#808080", color: "black", fontSize: "16px", marginRight: "10px", height: "40px", fontStyle: "italic", }} >
             Search
           </button>
-          <button style={{ backgroundColor: "#D9D9D9", color: "black", fontSize: "16px", marginRight: "10px", height: "40px", fontStyle: "italic", }} >
+          <button style={{ backgroundColor: "#808080", color: "black", fontSize: "16px", marginRight: "10px", height: "40px", fontStyle: "italic", }} >
             Clear
           </button>
         </div>

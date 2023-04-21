@@ -50,7 +50,7 @@ const Login = () => {
   return (
     <div>
       <Head>
-        <title>Login</title>
+        <title>Service Charge 5 Login</title>
         <meta name="keywords" content="dashboard" />
       </Head>
       <main className="flex flex-col items-center justify-center w-full px-20 text-center" style={{marginBottom:'-5%'}} >
@@ -143,7 +143,7 @@ const Login = () => {
             <div className="text-sm">
                   <p>
                     Don't have an account?{" "}
-                    <Link href="#" className="text-red-700">
+                    <Link href="/register" className="text-red-700">
                       Register here
                     </Link>
                   </p>

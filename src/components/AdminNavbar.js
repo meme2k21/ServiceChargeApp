@@ -65,7 +65,7 @@ function AdminNavbar(props) {
           <Link
             className={router.asPath === "/login" ? "active-link" : ""} href="/login" style={{textDecoration:'none'}} onClick={handleLoginClick}
           >
-            Login
+            Logout
           </Link>
         )}
     </nav>

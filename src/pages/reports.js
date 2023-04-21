@@ -4,15 +4,6 @@ import React, { useState, useEffect, useMemo, useRef } from "react";
 import axios from "axios";
 import DataTable from "react-data-table-component";
 import "jspdf-autotable";
-import {
-  FaLock,
-  FaLockOpen,
-  FaRegEnvelope,
-  FaUnlockAlt,
-  FaUserLock,
-} from "react-icons/fa";
-import styles from "../styles/Home.module.css";
-
 
 function reports() {
   const [ticketYearCreated, setTicketYearCreated] = useState('Year Created');

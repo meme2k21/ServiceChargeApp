@@ -15,17 +15,30 @@ function dashboard() {
 
   const [selectedRows, setSelectedRows] = useState([]);
   const [tickets, setTickets] = useState([]);
+  const [agingTickets, setAgingTickets] = useState([]);
+
   useEffect(() => {
     axios
       .get("http://localhost:8080/tickets")
       .then((response) => {
         setTickets(response?.data);
+        console.log(response?.data);
       })
       .catch((err) => console.log(err));
   }, [selectedRows]);
+
+  useEffect(() => {
+    const aged = tickets.filter(ticket => {
+      const oneWeekAgo = new Date().getTime() - 7 * 24 * 60 * 60 * 1000;
+      ticket.date_created >= oneWeekAgo;
+    });
+    setAgingTickets(aged);
+  }, [tickets]);
+
   const handleButtonClick = (row) => {
     console.log("clicked Ticket #" + row.ticket_id);
   };
+
   const handleChange = useCallback((state) => {
     setSelectedRows(state?.selectedRows);
   }, []);
@@ -127,6 +140,7 @@ function dashboard() {
 
       <div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gridGap: "20px", color: "white" }}>
+          {/* first box in dashboard */}
           <div style={{ background: "#F27B53", padding: "20px", borderRadius: "5px", display:'flex', alignItems:'center', position: 'relative' }}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={50} fill="none">
               <path fill="white" fillRule="evenodd" d="M3 5a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v16a1 1 0 0 1-1.625.78l-1.929-1.542-2.391 1.594a1 1 0 0 1-1.18-.051L12 20.28l-1.875 1.5a1 1 0 0 1-1.18.051l-2.391-1.594-1.93 1.543A1 1 0 0 1 3 21V5zm5 1a1 1 0 0 0 0 2h8a1 1 0 1 0 0-2H8zm0 4a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2H8zm0 4a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2H8z" clipRule="evenodd"></path>
@@ -140,12 +154,14 @@ function dashboard() {
             </a>
             {showCreateModal && <CreateTicket show={showCreateModal} onYes={onCreate} onCancel={onCancelCreate}/>}
           </div>
+
+          {/* second box in dashboard */}
           <div style={{ background: "#DF577B", padding: "20px", borderRadius: "5px", display:'flex', alignItems:'center', position: 'relative' }}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={50} fill="none">
               <path fill="white" fillRule="evenodd" d="M3 5a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v16a1 1 0 0 1-1.625.78l-1.929-1.542-2.391 1.594a1 1 0 0 1-1.18-.051L12 20.28l-1.875 1.5a1 1 0 0 1-1.18.051l-2.391-1.594-1.93 1.543A1 1 0 0 1 3 21V5zm5 1a1 1 0 0 0 0 2h8a1 1 0 1 0 0-2H8zm0 4a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2H8zm0 4a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2H8z" clipRule="evenodd"></path>
             </svg>
             <div style={{ fontSize: "24px", fontWeight: "bold", marginRight: "10px"}}> {sortedData.length} </div>
-            <div style={{ fontSize: "16px" }}>{(sortedData.length>1) ? 'tickets':'ticket'}</div>
+            <div style={{ fontSize: "16px" }}>{(agingTickets.length>1) ? 'aging tickets':'aging ticket'}</div>
             <a onClick={() => {
               router.push("/ticket/create");
             }}>
@@ -154,6 +170,8 @@ function dashboard() {
               </svg>
             </a>
           </div>
+
+          {/* third box in dashboard */}
           <div style={{ background: "#847CC5", padding: "20px", borderRadius: "5px", display:'flex', alignItems:'center', position: 'relative' }}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={50} fill="none">
               <path fill="white" fillRule="evenodd" d="M3 5a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v16a1 1 0 0 1-1.625.78l-1.929-1.542-2.391 1.594a1 1 0 0 1-1.18-.051L12 20.28l-1.875 1.5a1 1 0 0 1-1.18.051l-2.391-1.594-1.93 1.543A1 1 0 0 1 3 21V5zm5 1a1 1 0 0 0 0 2h8a1 1 0 1 0 0-2H8zm0 4a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2H8zm0 4a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2H8z" clipRule="evenodd"></path>
@@ -168,6 +186,8 @@ function dashboard() {
               </svg>
             </a>
           </div>
+
+          {/* fourth box in dashboard */}
           <div style={{ background: "#28B79B", padding: "20px", borderRadius: "5px", display:'flex', alignItems:'center', position: 'relative' }}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={50} fill="none">
               <path fill="white" fillRule="evenodd" d="M3 5a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v16a1 1 0 0 1-1.625.78l-1.929-1.542-2.391 1.594a1 1 0 0 1-1.18-.051L12 20.28l-1.875 1.5a1 1 0 0 1-1.18.051l-2.391-1.594-1.93 1.543A1 1 0 0 1 3 21V5zm5 1a1 1 0 0 0 0 2h8a1 1 0 1 0 0-2H8zm0 4a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2H8zm0 4a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2H8z" clipRule="evenodd"></path>
