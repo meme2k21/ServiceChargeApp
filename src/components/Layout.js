@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import AdminNavbar from "./AdminNavbar";
+import ClientNavbar from "./ClientNavbar";
 import { useRouter } from 'next/router';
 
 function Layout({ children }) {
@@ -11,11 +12,6 @@ function Layout({ children }) {
   const [role, setRole] = useState(null);
   const [email, setEmail] = useState(null);
 
-  console.log(id);
-  console.log(username);
-  console.log(role);
-  console.log(email);
-
   useEffect(() => {
     setId(localStorage.getItem('id'));
     setUsername(localStorage.getItem('username'));
@@ -24,6 +20,7 @@ function Layout({ children }) {
   }, []);
 
   const hideNavbar = router.pathname === '/login' || router.pathname === '/register' || router.pathname === '/';
+  const isAdmin = `${role}` !== `1`;
 
   return (
     <div className="content" 
@@ -31,7 +28,7 @@ function Layout({ children }) {
           {display:'flex', flexDirection:'column', minHeight:'100vh' }: 
           {display:'flex', flexDirection:'column', minHeight:'100vh', backgroundImage:'url(bgAll.jpg)', backgroundSize:'cover', backgroundPosition:'center', boxShadow: 'inset 300px 300px 1000px rgba(0, 0, 0, .9)'}
           }>
-      {hideNavbar ? <Navbar />: <AdminNavbar />}
+      {!hideNavbar ? isAdmin? <AdminNavbar />:<ClientNavbar />: <Navbar />}
       <div style={{paddingTop:'80px', margin:'20px', flexGrow:1}} >{children}</div>
       <Footer/>
     </div>

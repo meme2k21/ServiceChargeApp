@@ -5,12 +5,12 @@ import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import DataTable from "react-data-table-component";
 import withAuth from "./authorization";
-import CreateTicket from "./ticket/create";
+import {ClientCreateTicket} from "./ticket/create";
 //import Modal from '@mui/material/Modal';
 import { Button, Modal } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function dashboard() {
+function clientDashboard() {
     const router = useRouter();
     const [id, setId] = useState(null);
     const [username, setUsername] = useState(null);
@@ -18,13 +18,12 @@ function dashboard() {
     const [email, setEmail] = useState(null);
 
     const [selectedRows, setSelectedRows] = useState([]);
-    const [users, setUsers] = useState([]);
     const [tickets, setTickets] = useState([]);
     const [agingTickets, setAgingTickets] = useState([]);
     const [pendingTickets, setPendingTickets] = useState([]);
     const [invoiceTickets, setInvoiceTickets] = useState([]);
 
-    // get data from localhost
+    // get data from local storage
     useEffect(() => {
       setId(localStorage.getItem('id'));
       setUsername(localStorage.getItem('username'));
@@ -32,22 +31,19 @@ function dashboard() {
       setEmail(localStorage.getItem('email'));
     }, []);
 
-    // get lists of tickets and users
+    // get tickets from database
     useEffect(() => {
+        getData();
+    }, [selectedRows, id]);
+    function getData() {
         axios
             .get("http://localhost:8080/tickets")
             .then((response) => {
-                setTickets(response?.data);
+                const data = response?.data;
+                setTickets(data.filter(ticket => ticket.ticket_owner === `${id}`));
             })
             .catch((err) => console.log(err));
-        
-        axios
-            .get("http://localhost:8080/users")
-            .then(response => {
-              console.log(response?.data);
-              setUsers(response?.data);
-            });
-    }, [selectedRows]);
+    }
 
     useEffect(() => {
         const aged = tickets.filter(ticket => {
@@ -124,6 +120,7 @@ function dashboard() {
         onCancelCreate();
     }
     const onCancelCreate = () => {
+        getData();
         handleChange;
         setShowCreateModal(false);
     }
@@ -138,13 +135,14 @@ function dashboard() {
         console.log(selectedRow);
     }
     const onCancelShow = () => {
+        getData();
         setShowViewTicketModal(false);
     }
 
     return (
         <div style={{ background: "white" }}>
             <Head>
-                <title>Dashboard</title>
+                <title>Client Dashboard</title>
                 <meta name="keywords" content="dashboard" />
             </Head>
 
@@ -162,7 +160,7 @@ function dashboard() {
                                 <path fillRule="evenodd" d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z" fill="white"></path> <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z" fill="white"></path> <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z" fill="white"></path>
                             </svg>
                         </a>
-                        {showCreateModal && <CreateTicket show={showCreateModal} onYes={onCreate} onCancel={onCancelCreate} />}
+                        {showCreateModal && <ClientCreateTicket show={showCreateModal} onYes={onCreate} onCancel={onCancelCreate} />}
                     </div>
 
                     {/* second box in dashboard */}
@@ -235,21 +233,12 @@ function dashboard() {
                                 <td className="table-cell flex-row">Ticket Number</td>
                                 <td className="table-cell">Ticket Subject</td>
                                 <td className="table-cell">Ticket Description</td>
-                                <td className="table-cell">Ticket Owner</td>
                                 <td className="table-cell">Date Created</td>
                                 <td className="table-cell">Status</td>
                             </tr>
                         </thead>
                         <tbody>
                             {tickets.map((ticket) => {
-
-                              const matchingUser = users.find(user => { 
-                                console.log(user.user_id === ticket.ticket_owner);
-                                console.log(user.user_id.toLocaleString(), ticket.ticket_owner);
-                                return (`${user.user_id}` === `${ticket.ticket_owner}`)
-                              });
-
-                              console.log(matchingUser);
                                 return (
                                     <tr
                                         key={ticket.ticket_id}
@@ -260,7 +249,6 @@ function dashboard() {
                                         <td className="table-cell flex-row">{ticket.ticket_id}</td>
                                         <td className="table-cell">{ticket.ticket_title}</td>
                                         <td className="table-cell">{ticket.ticket_description}</td>
-                                        <td className="table-cell">{matchingUser?.username}</td>
                                         <td className="table-cell">{ticket.date_created}</td>
                                         <td className="table-cell">{ticket.ticket_status}</td>
                                     </tr>
@@ -275,7 +263,8 @@ function dashboard() {
     );
 }
 
-export default dashboard;
+export default clientDashboard;
+
 
 export function ShowTicketModal({ show, onCancel, row }) {
     const style = { position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '80%', maxWidth: '600px', bgcolor: 'background.paper', border: '2px solid #000', boxShadow: 24, backgroundColor: 'white', minWidth: '418px' };
@@ -293,6 +282,7 @@ export function ShowTicketModal({ show, onCancel, row }) {
 
     const displayDate = `${mm} ${dd} ${yyyy} (${formattedTime})`;
 
+    
     //FOR CONFORME SLIP MODAL
     const [showConformeModal, setShowConformeModal] = useState(false);
 
@@ -351,12 +341,15 @@ export function ShowTicketModal({ show, onCancel, row }) {
                     </table>
                 </Modal.Body>
                 <Modal.Footer style={{ display: 'flex', justifyContent: 'center' }}>
-                    {row.ticket_status === 'pending' ? (
-                        <Button onClick={() => { handleConformModal() }} style={{ backgroundColor: '#963634', border: 'none' }} >
-                            Create conforme slip
+                    {row.ticket_status === 'case-filed' ? (
+                        <Button onClick={handleConformModal} style={{ backgroundColor: '#963634', border: 'none' }} >
+                            Submit conform slip
                         </Button>
                     ) : null}
-                    {showConformeModal && <ConformeSlipModal show={showConformeModal} onCancel={() => { setShowConformeModal(false); onCancel() }} row={row} />}
+                    <Button onClick={onCancel} style={{ backgroundColor: '#963634', border: 'none' }} >Done</Button>
+
+                    {showConformeModal && 
+                    <ConformeSlipModal show={showConformeModal} onCancel={() => { setShowConformeModal(false); onCancel() }} row={row} />}
 
                 </Modal.Footer>
             </div>
@@ -380,81 +373,6 @@ export function ConformeSlipModal({ show, onCancel, row }) {
     }
 
     return (
-        // <Modal
-        //   open={show}
-        //   onClose={onCancel}
-        //   aria-labelledby="modal-modal-title"
-        //   aria-describedby="modal-modal-description"
-        //   className="modal d-block"
-        // >
-        //   <div className="modal-dialog modal-dialog-centered" style={style}>
-        //     <div className="modal-header" style={{padding: '10px', backgroundColor:'#963634', color:'white'}} >
-        //       <h5 className="modal-title" style={{fontWeight: 'bold'}}>Single Ticket View</h5>
-        //       <svg
-        //           style={{ position: 'absolute', top: '5px', right: '5px', cursor: 'pointer', border:'1px solid gray' }}
-        //           xmlns="http://www.w3.org/2000/svg"
-        //           width="30" height="30" fill="currentColor" className="bi bi-x" viewBox="0 0 16 16"
-        //           onClick={onCancel}
-        //       >
-        //         <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
-        //       </svg>
-        //     </div>
-        //     <div className="modal-body text-center" style={{ margin:'10px'}}>
-        //       <p style={{fontWeight:'bold'}}>ALLIANCE SOFTWARE INC.<br/></p>
-        //       <p style={{fontSize:'12px'}}>
-        //         14th Floor, Buildcomm Center, Sumilon Road, Cebu Business Park<br/>
-        //         Cebu City, Cebu, Philippines 6000<br/>
-        //         <b>Contact No.:</b>&nbsp;+63-32-261-1705
-        //       </p>
-        //       <br/>
-        //       <p style={{fontSize:'24px', fontWeight:'bold'}}>OFFICIAL CONFORME SLIP</p>
-        //       <br/>
-        //       <table className="CancelAllStyling">
-        //         <thead>
-        //           <tr className="CancelAllStyling" style={{width:'20%', fontSize:'14px'}}>
-        //             <td className="CancelAllStyling" style={{width:'20%', fontSize:'14px'}}></td>
-        //             <td className="CancelAllStyling" style={{width:'20%', fontSize:'14px'}}></td>
-        //             <td className="CancelAllStyling" style={{width:'20%', fontSize:'14px'}}></td>
-        //             <td className="CancelAllStyling" style={{width:'20%', fontSize:'14px'}}></td>
-        //           </tr>
-        //         </thead>
-        //           <tbody>
-        //             <tr className="CancelAllStyling">
-        //               <td className="CancelAllStyling" style={{fontSize:'14px'}}>Conforme No. </td>
-        //               <td className="CancelAllStyling" style={{borderBottom:'1px solid black', paddingLeft:'10px', color: 'red'}}>{row.ticket_id}</td>
-        //               <td className="CancelAllStyling" style={{paddingLeft:'4%', fontSize:'14px'}}>Date: </td>
-        //               <td className="CancelAllStyling" style={{borderBottom:'1px solid black', textAlign:'center', minWidth:'187px'}}>{displayDate}</td>
-        //             </tr>
-        //             <br/>
-        //             <tr>
-        //               <td className="CancelAllStyling" style={{fontSize:'14px'}}>Ticket No.: </td>
-        //               <td colSpan={3} className="CancelAllStyling" style={{borderBottom:'1px solid black', paddingLeft:'10px'}}>{row.ticket_id}</td>
-        //             </tr>
-        //             <tr>
-        //               <td className="CancelAllStyling" style={{fontSize:'14px'}}>Title: </td>
-        //               <td colSpan={3} className="CancelAllStyling" style={{borderBottom:'1px solid black', paddingLeft:'10px'}}>{row.ticket_title}</td>
-        //             </tr>
-        //             <tr>
-        //               <td className="CancelAllStyling" style={{fontSize:'14px'}}>Description: </td>
-        //               <td colSpan={3} className="CancelAllStyling" style={{borderBottom:'1px solid black', paddingLeft:'10px', wordBreak:'break-all', wordWrap:'break-word' }}>{row.ticket_description}</td>
-        //             </tr>
-        //             <tr>
-        //               <td className="CancelAllStyling" style={{fontSize:'14px'}}>Price: </td>
-        //               <td colSpan={3} className="CancelAllStyling" style={{borderBottom:'1px solid black', paddingLeft:'10px', wordBreak:'break-all', wordWrap:'break-word' }}>
-        //                 Php:&nbsp;<input type='number' placeholder="00.00" style={{border:'none', outline:'none', fontSize:'16px', color:'#e40707dc', width:'80%'}}/>
-        //               </td>
-        //             </tr>
-        //             <br/><br/>
-        //             <tr>
-        //               <td colSpan={4} className="CancelAllStyling" style={{borderBottom:'2px solid black' }}></td>
-        //             </tr>
-        //           </tbody>
-        //       </table>
-        //       <br></br>
-        //       {row.ticket_status === 'pending'? (<button onClick={() => {handleSubmit(), onCancel()}} >Create</button>): null}
-        //     </div>
-        //   </div>
-        // </Modal>
         <Modal show={show} onHide={onCancel}>
             <div>
                 <Modal.Header style={{ padding: '10px', backgroundColor: '#963634', color: 'white' }}>
@@ -511,12 +429,18 @@ export function ConformeSlipModal({ show, onCancel, row }) {
                             <tr>
                                 <td className="CancelAllStyling" style={{ fontSize: '14px' }}>Price: </td>
                                 <td colSpan={3} className="CancelAllStyling" style={{ borderBottom: '1px solid black', paddingLeft: '10px', wordBreak: 'break-all', wordWrap: 'break-word' }}>
-                                    Php:&nbsp;<input type='number' placeholder="00.00" style={{ border: 'none', outline: 'none', fontSize: '16px', color: '#e40707dc', width: '80%' }} />
+                                    Php: 10.00
                                 </td>
                             </tr>
                             <br />
                         </tbody>
                     </table>
+                    
+                    <form onSubmit={handleSubmit}>
+                        <input type="file" />
+                        <button type="submit" style={{ backgroundColor: '#963634', border: 'none' }}>Upload</button>
+                    </form>
+
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={onCancel}>
