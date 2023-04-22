@@ -389,6 +389,7 @@ export function ConformeSlipModal({ show, onCancel, row }) {
                     </svg>
                 </Modal.Header>
                 <Modal.Body style={{ margin: '10px', textAlign: 'center' }}>
+
                     <p style={{ fontWeight: 'bold' }}>ALLIANCE SOFTWARE INC.<br /></p>
                     <p style={{ fontSize: '12px' }}>
                         14th Floor, Buildcomm Center, Sumilon Road, Cebu Business Park<br />
@@ -435,11 +436,15 @@ export function ConformeSlipModal({ show, onCancel, row }) {
                             <br />
                         </tbody>
                     </table>
-                    
-                    <form onSubmit={handleSubmit}>
-                        <input type="file" />
-                        <button type="submit" style={{ backgroundColor: '#963634', border: 'none' }}>Upload</button>
-                    </form>
+
+                    <div style={{textAlign:'left'}}>
+                        <label>eSignature:</label>
+                        <input type="file"/>
+                        <label>Proof of Payment:</label>
+                        <input type="file"/>
+                        <label>Scanned OR Slip:</label>
+                        <input type="file"/>
+                    </div>
 
                 </Modal.Body>
                 <Modal.Footer>
