@@ -43,11 +43,10 @@ const Login = () => {
           localStorage.setItem('role',response.data.user_role_id);
 
           console.log(response.data.user_role_id);
+          if(response.data.user_role_id === 1)
           router.push("/clientDashboard");
-          // if(response.data.user_role_id === 1)
-          //   router.push("/");
-          // else
-          //   router.push("/dashboard");
+          else
+            router.push("/dashboard");
           console.log("Success fetch user");
           
         } else {
