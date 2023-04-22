@@ -34,10 +34,21 @@ const Login = () => {
       .post("http://localhost:8080/login", credentials)
       .then((response) => {
         // authentication successful, do something here
+        console.log(response.data);
         if (response.status === 200 && response.data !== "") {
-          router.push("/dashboard");
-          console.log("Success fetch user");
+
+          localStorage.setItem('id',response.data.user_id);
+          localStorage.setItem('username',response.data.username);
           localStorage.setItem('email', credentials.email);
+          localStorage.setItem('role',response.data.user_role_id);
+
+          console.log(response.data.user_role_id);
+          if(response.data.user_role_id === 1)
+            router.push("/");
+          else
+            router.push("/dashboard");
+          console.log("Success fetch user");
+          
         } else {
           console.log("Fail fetch user");
         }

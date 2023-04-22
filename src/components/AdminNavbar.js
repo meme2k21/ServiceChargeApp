@@ -31,7 +31,7 @@ function AdminNavbar(props) {
   const currentPage = props.currentPage;
 
   useEffect(() => {
-    getEmail(localStorage.getItem('email'))
+    getEmail(localStorage.getItem('email'));
   }, [])
 
   return (
@@ -77,16 +77,16 @@ function AdminNavbar(props) {
             Settings
           </Link>
           <Link
-          className={router.asPath === "/login" ? "active-link" : ""} href="/login" style={{textDecoration:'none'}} onClick={handleLogOutClick}
+          className={router.asPath === "/" ? "active-link" : ""} href="/" style={{textDecoration:'none'}} onClick={handleLogOutClick}
         >
           Log Out
         </Link>
         </>
         ) : (
           <Link
-            className={router.asPath === "/login" ? "active-link" : ""} href="/login" style={{textDecoration:'none'}} onClick={handleLoginClick}
+            className={router.asPath === "/" ? "active-link" : ""} href="/" style={{textDecoration:'none'}} onClick={handleLoginClick}
           >
-            Logout
+            Log Out
           </Link>
         )}
     </nav>
