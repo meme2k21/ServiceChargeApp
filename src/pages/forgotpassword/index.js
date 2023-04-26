@@ -79,9 +79,10 @@ function ForgotPassword() {
     const response = await axios.get(
       `http://localhost:8080/forgot-password/token?token=${token}`
     );
-    if (response.status === 200 && response.data !== null) {
-      const tokenData = response.data.data;
-      const tokenDate = new Date(tokenData.expiryDate);
+    console.log(response);
+    if (response.status === 200 && response.data.data !== null) {
+      const tokenData = response?.data?.data;
+      const tokenDate = new Date(tokenData?.expiryDate);
       const now = new Date();
       if (tokenDate < now) {
         alert("Token has expired. Please request another one.");
