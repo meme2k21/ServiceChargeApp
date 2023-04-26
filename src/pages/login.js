@@ -108,7 +108,7 @@ const Login = () => {
         style={{ marginBottom: "-5%" }}
       >
         {showModal && <WrongCredentialsModal showModal={showModal} />}
-        <div className=" rounded-2xl shadow-2xl flex w-full max-w-4xl border border-white">
+        <div className="mt-4 rounded-2xl shadow-2xl flex w-full max-w-4xl border border-white">
           {/* LOGIN SECTION */}
           <div
             className="w-1/2 "
