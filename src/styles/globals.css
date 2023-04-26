@@ -28,6 +28,16 @@ a {
   /* max-width: 960px; */
   margin: 0 auto;
 }
+.btn_add{
+  background-color: rgb(196, 23, 23);
+  float:right;
+  font-size: 16px;
+  color: white;
+}
+.anticon svg {
+margin-top: -8px;
+}
+
 nav {
   z-index: 999;
   position: fixed;
@@ -100,6 +110,10 @@ footer {
 h2 {
   margin-bottom: 1rem;
 }
+.form1{
+  align-items:start !important;
+  justify-content: left !important;
+}
 
 form {
   display: flex;
@@ -115,6 +129,7 @@ form {
 label {
   font-size: 1rem;
   margin-bottom: 0.5rem;
+ 
 }
 
 input {
@@ -135,15 +150,31 @@ button {
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 }
+.btn_add{
+  width: 150px !important;
+  height: 40px;
+  font-size: 18px !important;
+  margin-bottom: 8px !important;
+}
 
+.btn_add:hover{
+  background-color: #b82624 !important;
+  color: white !important;
+  box-shadow: none !important;
+}
 button:hover {
   background-color: #e40707dc;
   box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.7);
 }
 
+
 button.forgotPassword:hover {
   color: #e40707dc;
   background-color: transparent;
+}
+
+.anticon svg {
+  display:block;
 }
 
 .not-found {

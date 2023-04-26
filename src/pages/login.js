@@ -6,16 +6,18 @@ import { FaRegEnvelope, FaUnlockAlt } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { Modal } from "react-bootstrap";
 const LOGIN_URL = "/login";
 
 // axios.create({
 //   baseURL: "http://localhost:3500",
 // });
 
-
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
   const router = useRouter();
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -34,22 +36,36 @@ const Login = () => {
       .post("http://localhost:8080/login", credentials)
       .then((response) => {
         // authentication successful, do something here
-        console.log(response.data);
-        if (response.status === 200 && response.data !== "") {
+        // --------------------------------------------------------------
+        // const user = response?.data?.data;
+        // console.log(response.data);
+        // if (response.data.status === "ERROR" && user === null) {
+        //   setShowModal(true);
+        //   return;
+        // }
 
-          localStorage.setItem('id',response.data.user_id);
-          localStorage.setItem('username',response.data.username);
-          localStorage.setItem('email', credentials.email);
-          localStorage.setItem('role',response.data.user_role_id);
+        // localStorage.setItem("id", user.user_id);
+        // localStorage.setItem("username", user.username);
+        // localStorage.setItem("email", credentials.email);
+        // localStorage.setItem("role", user.role.role_id);
+
+        // if (user.role.role_id === 1) router.push("/clientDashboard");
+        // else router.push("/dashboard");
+        // THIS IS WITH NEW BACKEND
+        // --------------------------------------------------------------
+
+        if (response.status === 200 && response.data !== "") {
+          localStorage.setItem("id", response.data.user_id);
+          localStorage.setItem("username", response.data.username);
+          localStorage.setItem("email", credentials.email);
+          localStorage.setItem("role", response.data.user_role_id);
 
           console.log(response.data.user_role_id);
-          if(response.data.user_role_id === 1)
-          router.push("/clientDashboard");
-          else
-            router.push("/dashboard");
+          if (response.data.user_role_id === 1) router.push("/clientDashboard");
+          else router.push("/dashboard");
           console.log("Success fetch user");
-          
         } else {
+          setShowModal(true);
           console.log("Fail fetch user");
         }
       })
@@ -59,16 +75,45 @@ const Login = () => {
       });
   };
 
+  function WrongCredentialsModal({ showModal }) {
+    return (
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header>
+          <Modal.Title>Login failed</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h6>Your email or password is incorrect. Please try again.</h6>
+        </Modal.Body>
+        <Modal.Footer>
+          <button
+            onClick={() => setShowModal(false)}
+            type="button"
+            className="w-full bg-red-700 hover:bg-white hover:text-red-700"
+          >
+            OK
+          </button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+
   return (
     <div>
       <Head>
         <title>Service Charge 5 Login</title>
         <meta name="keywords" content="dashboard" />
       </Head>
-      <main className="flex flex-col items-center justify-center w-full px-20 text-center" style={{marginBottom:'-5%'}} >
+      <main
+        className="flex flex-col items-center justify-center w-full px-20 text-center"
+        style={{ marginBottom: "-5%" }}
+      >
+        {showModal && <WrongCredentialsModal showModal={showModal} />}
         <div className=" rounded-2xl shadow-2xl flex w-full max-w-4xl border border-white">
           {/* LOGIN SECTION */}
-          <div className="w-1/2 " style={{borderTopLeftRadius:'5%', borderBottomLeftRadius:'5%'}}>
+          <div
+            className="w-1/2 "
+            style={{ borderTopLeftRadius: "5%", borderBottomLeftRadius: "5%" }}
+          >
             <div className="text-left mt-10 mb-5 text-white">
               <h2 className="font-bold">Login to Your Account</h2>
               <p className="text-xs">
@@ -83,6 +128,7 @@ const Login = () => {
                   <div className="bg-gray-100 w-full p-0 flex items-center mb-2 border-b-2 border-red-700">
                     <FaRegEnvelope className="text-gray-400 m-2" />
                     <input
+                      required
                       type="email"
                       name="email"
                       value={email}
@@ -94,6 +140,7 @@ const Login = () => {
                   <div className="bg-gray-100 w-full p-0 flex items-center border-b-2  border-red-700 mb-4">
                     <FaUnlockAlt className="text-gray-400 m-2" />
                     <input
+                      required
                       type="password"
                       name="password"
                       value={password}
@@ -134,12 +181,17 @@ const Login = () => {
             <p className="mb-2"></p>
           </div>
           {/* LOGO SECTION */}
-          <div className=" w-1/2 p-10" style={{borderTopRightRadius:"3%", borderBottomRightRadius:'3%', 
-              backgroundColor:'white' 
-          }}>
+          <div
+            className=" w-1/2 p-10"
+            style={{
+              borderTopRightRadius: "3%",
+              borderBottomRightRadius: "3%",
+              backgroundColor: "white",
+            }}
+          >
             <p className="font-semibold text-left">powered by</p>
             <Image
-              style={{ borderRadius: 5, opacity:1 }}
+              style={{ borderRadius: 5, opacity: 1 }}
               src="/logo-alliance-comp.png"
               width={200}
               height={200}
@@ -153,13 +205,13 @@ const Login = () => {
               height={500}
             />
             <div className="text-sm">
-                  <p>
-                    Don't have an account?{" "}
-                    <Link href="/register" className="text-red-700">
-                      Register here
-                    </Link>
-                  </p>
-                </div>
+              <p>
+                Don't have an account?{" "}
+                <Link href="/register" className="text-red-700">
+                  Register here
+                </Link>
+              </p>
+            </div>
           </div>
         </div>
       </main>
