@@ -343,7 +343,7 @@ export function ShowTicketModal({ show, onCancel, row }) {
                 <Modal.Footer style={{ display: 'flex', justifyContent: 'center' }}>
                     {row.ticket_status === 'case-filed' ? (
                         <Button onClick={handleConformModal} style={{ backgroundColor: '#963634', border: 'none' }} >
-                            Submit conform slip
+                            Submit conforme slip
                         </Button>
                     ) : null}
                     <Button onClick={onCancel} style={{ backgroundColor: '#963634', border: 'none' }} >Done</Button>

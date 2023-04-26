@@ -2,7 +2,7 @@ import axios from "axios";
 import Link from "next/link";
 import { Router, useRouter } from "next/router";
 import { useState } from "react";
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal, Form } from 'react-bootstrap';
 
 axios.create({
   baseURL: "http://localhost:3500",
@@ -90,11 +90,21 @@ export default function CreateTicket({show, onYes, onCancel}) {
               placeholder="Description"
               className="bg-gray-100 outline-none text-sm flex-1  autofill:bg-black mb-2"
             />
-
+            <div style={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-between', width:'100%'}}>
+              <label>Client: </label>
+              <br></br>
+              <Form.Select>
+                <option>James Pasa</option>
+                <option>Adrian Son</option>
+                <option>Ron Obedencio</option>
+                <option>Alyssa Jumapao</option>
+              </Form.Select>
+            </div>
             <button
               type="submit"
               className="w-full bg-red-700 hover:bg-cyan hover:text-black"
               onClick={handleSubmit}
+              style={{marginTop:'50px'}}
             >
               Create Ticket
             </button>
