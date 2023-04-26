@@ -6,7 +6,7 @@ const NotFound = () => {
   const router = useRouter();
   useEffect(() => {
     setTimeout(() => {
-      router.push("/dashboard");
+      router.push("/");
     }, 3000);
   }, []);
 
@@ -15,9 +15,9 @@ const NotFound = () => {
       <h1>Ooops...</h1>
       <h2>That page cannot be found :</h2>
       <p>
-        Go back to the <Link href="/dashboard">Dashboard</Link>
+        Go back to the <Link href="/">Login</Link>
       </p>
-      <p>After 3 seconds, you will be automatically redirected to dashboard</p>
+      <p>After 3 seconds, you will be automatically redirected to login</p>
     </div>
   );
 };
