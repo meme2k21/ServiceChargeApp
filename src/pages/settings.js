@@ -28,8 +28,8 @@ function settings() {
     },
     {
       title: 'Role Name',
-      dataIndex: 'role',
-      key: 'role',
+      dataIndex: "user_role_id",
+      key: 'user_role_id',
     },
     {
       title: 'Status',
@@ -37,7 +37,8 @@ function settings() {
       dataIndex: 'status',
       render: (_, { status }) => (
         <>
-          {status.map((tag) => {
+          { status?
+          status.map((tag) => {
             let color = 'green';
             if (tag === 'Inactive') {
               color = 'volcano';
@@ -47,7 +48,9 @@ function settings() {
                 {tag.toUpperCase()}
               </Tag>
             );
-          })}
+          }
+          ): null
+        }
         </>
       ),
     },
@@ -62,8 +65,9 @@ function settings() {
       ),
     },
   ];
+  console.log(columns);
     const [users, setUsers] = useState([]);
-  
+    console.log(users);
     useEffect(() => {
       axios
         .get("http://localhost:8080/users")
@@ -137,7 +141,7 @@ function settings() {
       </Head>
       <h3 className={styles.title} style={{textAlign: "left", float: "left"}}> <UserOutlined />List of Users</h3>
       <Button className="btn_add" style={{boxShadow: "none", float: "right"}} onClick={showaddUserModal} icon={<PlusOutlined/>}>Add Users</Button>
-      <Table columns={columns} dataSource={data} onRow={(record) => ({ onClick: () => {handleRowClick(record);}})} />
+      <Table columns={columns} dataSource={users? users:null} onRow={(record) => ({ onClick: () => {handleRowClick(record);}})} />
   
     {/* Modal for Add */}
     <Modal show={addUserModal} onHide={hideaddUserModal}>
