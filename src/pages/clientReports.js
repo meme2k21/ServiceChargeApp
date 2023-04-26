@@ -74,9 +74,10 @@ function reports() {
     []
   );
   const exportCSV = () => {
-    const headers = ['TITLE', 'DESCRIPTION', 'DATE FILED', 'STATUS', 'OWNER'];
+    const headers = ['ID', 'TITLE', 'DESCRIPTION', 'DATE FILED', 'STATUS', 'OWNER'];
   
     const data = tickets.map(ticket => [
+      ticket.ticket_id,
       ticket.ticket_title,
       ticket.ticket_description,
       ticket.date_created,

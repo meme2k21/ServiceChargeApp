@@ -5,6 +5,10 @@ import React from "react";
 import { FaRegEnvelope } from "react-icons/fa";
 
 function ForgotPasswordCode() {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+  };
+
   return (
     <>
       <Head>
@@ -40,26 +44,29 @@ function ForgotPasswordCode() {
                 your inbox, please check your spam.
               </p>
             </div>
-            <div className="py-10">
-              <div className="flex flex-col items-center">
-                <div className="bg-gray-100 w-full p-0 flex items-center mb-2 border-b-2 border-red-700">
-                  <FaRegEnvelope className="text-gray-400 m-2" />
+            <form onSubmit={handleSubmit}>
+              <div className="py-10">
+                <div className="flex flex-col items-center">
+                  <div className="bg-gray-100 w-full p-0 flex items-center mb-2 border-b-2 border-red-700">
+                    <FaRegEnvelope className="text-gray-400 m-2" />
 
-                  <input
-                    type="code"
-                    name="code"
-                    placeholder="Code"
-                    className="bg-gray-100 outline-none text-sm flex-1 border-hidden"
-                  />
+                    <input
+                      type="code"
+                      name="code"
+                      placeholder="Code"
+                      className="bg-gray-100 outline-none text-sm flex-1 border-hidden"
+                    />
+                  </div>
+                  <button
+                    href="/forgotpassword/reset"
+                    type="submit"
+                    className="bg-red-700 text-white p-2 rounded-sm w-full font-semibold hover:bg-white hover:text-red-700 mb-2 text-lg"
+                  >
+                    Continue
+                  </button>
                 </div>
-                <Link
-                  href="/forgotpassword/reset"
-                  className="bg-red-700 text-white p-2 rounded-sm w-full font-semibold hover:bg-white hover:text-red-700 mb-2 text-lg"
-                >
-                  Continue
-                </Link>
               </div>
-            </div>
+            </form>
             <p className="mb-2"></p>
           </div>
         </div>
