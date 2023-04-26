@@ -115,8 +115,8 @@ const Login = () => {
             style={{ borderTopLeftRadius: "5%", borderBottomLeftRadius: "5%" }}
           >
             <div className="text-left mt-10 mb-5 text-white">
-              <h2 className="font-bold">Login to Your Account</h2>
-              <p className="text-xs">
+              <h2 className="font-bold text-center">Login to Your Account</h2>
+              <p className="text-xs text-center">
                 Please input your credentials to proceed
               </p>
             </div>
