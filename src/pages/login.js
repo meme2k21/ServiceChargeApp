@@ -16,6 +16,8 @@ const LOGIN_URL = "/login";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
   const router = useRouter();
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -95,11 +97,8 @@ const Login = () => {
     );
   }
 
-  const [showModal, setShowModal] = useState(true);
-
   return (
     <div>
-      {showModal && <WrongCredentialsModal showModal={showModal} />}
       <Head>
         <title>Service Charge 5 Login</title>
         <meta name="keywords" content="dashboard" />
@@ -108,6 +107,7 @@ const Login = () => {
         className="flex flex-col items-center justify-center w-full px-20 text-center"
         style={{ marginBottom: "-5%" }}
       >
+        {showModal && <WrongCredentialsModal showModal={showModal} />}
         <div className=" rounded-2xl shadow-2xl flex w-full max-w-4xl border border-white">
           {/* LOGIN SECTION */}
           <div
