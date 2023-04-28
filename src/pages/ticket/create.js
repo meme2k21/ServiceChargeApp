@@ -2,25 +2,24 @@ import axios from "axios";
 import Link from "next/link";
 import { Router, useRouter } from "next/router";
 import { useState } from "react";
-import { Button, Modal, Form } from 'react-bootstrap';
+import { Button, Modal, Form } from "react-bootstrap";
 
 axios.create({
   baseURL: "http://localhost:3500",
 });
 
-
-export default function CreateTicket({show, onYes, onCancel}) {
+export default function CreateTicket({ show, onYes, onCancel }) {
   const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '80%',
-    maxWidth:'500px',
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "80%",
+    maxWidth: "500px",
+    bgcolor: "background.paper",
+    border: "2px solid #000",
     boxShadow: 24,
-    backgroundColor:'white'
+    backgroundColor: "white",
   };
 
   const router = useRouter();
@@ -61,18 +60,36 @@ export default function CreateTicket({show, onYes, onCancel}) {
   return (
     <Modal show={show} onHide={onCancel}>
       <div>
-        <Modal.Header style={{padding: '10px', backgroundColor:'#963634', color:'white'}}>
-          <Modal.Title style={{fontWeight: 'bold'}}>Add New Ticket</Modal.Title>
+        <Modal.Header
+          style={{
+            padding: "10px",
+            backgroundColor: "#963634",
+            color: "white",
+          }}
+        >
+          <Modal.Title style={{ fontWeight: "bold" }}>
+            Add New Ticket
+          </Modal.Title>
           <svg
-                style={{ position: 'absolute', top: '15px', right: '15px', cursor: 'pointer', border:'1px solid gray' }}
-                xmlns="http://www.w3.org/2000/svg"
-                width="30" height="30" fill="currentColor" className="bi bi-x" viewBox="0 0 16 16"
-                onClick={onCancel}
-            >
+            style={{
+              position: "absolute",
+              top: "15px",
+              right: "15px",
+              cursor: "pointer",
+              border: "1px solid gray",
+            }}
+            xmlns="http://www.w3.org/2000/svg"
+            width="30"
+            height="30"
+            fill="currentColor"
+            className="bi bi-x"
+            viewBox="0 0 16 16"
+            onClick={onCancel}
+          >
             <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
           </svg>
         </Modal.Header>
-        <Modal.Body className="text-center" style={{ margin:'10px'}}>
+        <Modal.Body className="text-center" style={{ margin: "10px" }}>
           <form onSubmit={handleSubmit}>
             <input
               type="text"
@@ -90,7 +107,15 @@ export default function CreateTicket({show, onYes, onCancel}) {
               placeholder="Description"
               className="bg-gray-100 outline-none text-sm flex-1  autofill:bg-black mb-2"
             />
-            <div style={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-between', width:'100%'}}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
               <label>Client: </label>
               <br></br>
               <Form.Select>
@@ -104,7 +129,7 @@ export default function CreateTicket({show, onYes, onCancel}) {
               type="submit"
               className="w-full bg-red-700 hover:bg-cyan hover:text-black"
               onClick={handleSubmit}
-              style={{marginTop:'50px'}}
+              style={{ marginTop: "50px" }}
             >
               Create Ticket
             </button>
@@ -115,18 +140,18 @@ export default function CreateTicket({show, onYes, onCancel}) {
   );
 }
 
-export function ClientCreateTicket({show, onYes, onCancel}) {
+export function ClientCreateTicket({ show, onYes, onCancel }) {
   const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '80%',
-    maxWidth:'500px',
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "80%",
+    maxWidth: "500px",
+    bgcolor: "background.paper",
+    border: "2px solid #000",
     boxShadow: 24,
-    backgroundColor:'white'
+    backgroundColor: "white",
   };
 
   const router = useRouter();
@@ -135,7 +160,9 @@ export function ClientCreateTicket({show, onYes, onCancel}) {
     ticket_description: "",
     date_created: new Date(),
     ticket_status: "pending",
-    ticket_owner: localStorage.getItem('id'),
+    ticket_owner_id: {
+      user_id: localStorage.getItem("id"),
+    },
   });
 
   const handleOnChangeTicket = (e) => {
@@ -149,13 +176,13 @@ export function ClientCreateTicket({show, onYes, onCancel}) {
     axios
       .post("http://localhost:8080/ticket/create", ticket)
       .then((response) => {
-        console.log(response.data);
+        console.log(response.data.data);
         // authentication successful, do something here
         if (response.status === 200) {
-          console.log("Success create ticket");
+          console.log(response.data.message);
           onCancel();
         } else {
-          console.log("Fail create ticket");
+          console.log(response.data.message);
         }
       })
       .catch((error) => {
@@ -167,18 +194,36 @@ export function ClientCreateTicket({show, onYes, onCancel}) {
   return (
     <Modal show={show} onHide={onCancel}>
       <div>
-        <Modal.Header style={{padding: '10px', backgroundColor:'#963634', color:'white'}}>
-          <Modal.Title style={{fontWeight: 'bold'}}>Add New Ticket</Modal.Title>
+        <Modal.Header
+          style={{
+            padding: "10px",
+            backgroundColor: "#963634",
+            color: "white",
+          }}
+        >
+          <Modal.Title style={{ fontWeight: "bold" }}>
+            Add New Ticket
+          </Modal.Title>
           <svg
-                style={{ position: 'absolute', top: '15px', right: '15px', cursor: 'pointer', border:'1px solid gray' }}
-                xmlns="http://www.w3.org/2000/svg"
-                width="30" height="30" fill="currentColor" className="bi bi-x" viewBox="0 0 16 16"
-                onClick={onCancel}
-            >
+            style={{
+              position: "absolute",
+              top: "15px",
+              right: "15px",
+              cursor: "pointer",
+              border: "1px solid gray",
+            }}
+            xmlns="http://www.w3.org/2000/svg"
+            width="30"
+            height="30"
+            fill="currentColor"
+            className="bi bi-x"
+            viewBox="0 0 16 16"
+            onClick={onCancel}
+          >
             <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
           </svg>
         </Modal.Header>
-        <Modal.Body className="text-center" style={{ margin:'10px'}}>
+        <Modal.Body className="text-center" style={{ margin: "10px" }}>
           <form onSubmit={handleSubmit}>
             <input
               type="text"

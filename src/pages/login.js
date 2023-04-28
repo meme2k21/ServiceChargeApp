@@ -38,37 +38,37 @@ const Login = () => {
       .then((response) => {
         // authentication successful, do something here
         // --------------------------------------------------------------
-        // const user = response?.data?.data;
-        // console.log(response.data);
-        // if (response.data.status === "ERROR" && user === null) {
-        //   setShowModal(true);
-        //   return;
-        // }
+        const user = response?.data?.data;
+        console.log(response.data);
+        if (response.data.status === "ERROR" && user === null) {
+          setShowModal(true);
+          return;
+        }
 
-        // localStorage.setItem("id", user.user_id);
-        // localStorage.setItem("username", user.username);
-        // localStorage.setItem("email", credentials.email);
-        // localStorage.setItem("role", user.role.role_id);
+        localStorage.setItem("id", user.user_id);
+        localStorage.setItem("username", user.username);
+        localStorage.setItem("email", credentials.email);
+        localStorage.setItem("role", user.role.role_id);
 
-        // if (user.role.role_id === 1) router.push("/clientDashboard");
-        // else router.push("/dashboard");
+        if (user.role.role_id === 1) router.push("/clientDashboard");
+        else router.push("/dashboard");
         // THIS IS WITH NEW BACKEND
         // --------------------------------------------------------------
 
-        if (response.status === 200 && response.data !== "") {
-          localStorage.setItem("id", response.data.user_id);
-          localStorage.setItem("username", response.data.username);
-          localStorage.setItem("email", credentials.email);
-          localStorage.setItem("role", response.data.user_role_id);
+        // if (response.status === 200 && response.data !== "") {
+        //   localStorage.setItem("id", response.data.user_id);
+        //   localStorage.setItem("username", response.data.username);
+        //   localStorage.setItem("email", credentials.email);
+        //   localStorage.setItem("role", response.data.user_role_id);
 
-          console.log(response.data.user_role_id);
-          if (response.data.user_role_id === 1) router.push("/clientDashboard");
-          else router.push("/dashboard");
-          console.log("Success fetch user");
-        } else {
-          setShowModal(true);
-          console.log("Fail fetch user");
-        }
+        //   console.log(response.data.user_role_id);
+        //   if (response.data.user_role_id === 1) router.push("/clientDashboard");
+        //   else router.push("/dashboard");
+        //   console.log("Success fetch user");
+        // } else {
+        //   setShowModal(true);
+        //   console.log("Fail fetch user");
+        // }
       })
       .catch((error) => {
         // authentication failed, do something here
