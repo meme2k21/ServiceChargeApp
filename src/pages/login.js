@@ -9,15 +9,10 @@ import { useRouter } from "next/router";
 import { Modal } from "react-bootstrap";
 const LOGIN_URL = "/login";
 
-// axios.create({
-//   baseURL: "http://localhost:3500",
-// });
-
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showModal, setShowModal] = useState(false);
-  console.log("samepl");
 
   const router = useRouter();
   const handleEmailChange = (event) => {
