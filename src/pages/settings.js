@@ -3,7 +3,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useEffect } from "react";
 import {
-  EditOutlined, DeleteOutlined,PlusOutlined,UserOutlined, UserAddOutlined, FileSearchOutlined
+  EditOutlined, DeleteOutlined,PlusOutlined,UserOutlined, UserAddOutlined, FileSearchOutlined,UserDeleteOutlined
 } from '@ant-design/icons';
 
 import React from "react";
@@ -11,6 +11,7 @@ import styles from "../styles/Home.module.css";
 import { Space, Table, Tag, Button } from 'antd';
 import { useState } from 'react';
 import { Form, Modal, Row } from "react-bootstrap";
+import { fontStyle } from "@mui/system";
 
 function settings() {
 
@@ -19,7 +20,7 @@ function settings() {
       title: 'Username',
       dataIndex: 'username',
       key: 'username',
-      // render: (text) => <a>{text}</a>,
+
     },
     {
       title: 'Email Address',
@@ -28,8 +29,8 @@ function settings() {
     },
     {
       title: 'Role Name',
-      dataIndex: "user_role_id",
-      key: 'user_role_id',
+      render: (record) => record.role.role_name,
+      key: 'role',
     },
     {
       title: 'Status',
@@ -37,20 +38,11 @@ function settings() {
       dataIndex: 'status',
       render: (_, { status }) => (
         <>
-          { status?
-          status.map((tag) => {
-            let color = 'green';
-            if (tag === 'Inactive') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          }
-          ): null
-        }
+          {status && (
+           <  Tag color={status === 'Active' ? 'green' : 'red'} key={status}>
+              {status.toUpperCase()}
+          </Tag>
+    )}
         </>
       ),
     },
@@ -60,57 +52,77 @@ function settings() {
       render: (_, record) => (
         <Space size="middle">
           <a><EditOutlined style={{color: 'green', fontSize: '20px', cursor: 'pointer'}}  onClick={() => {showEditUserModal(); console.log(record);}}/></a>
-          <a><DeleteOutlined style={{color: 'red', fontSize: '20px'}}  /></a>
+          <a><DeleteOutlined style={{color: 'red', fontSize: '20px'}} onClick={() => {showDeleteUserModal(); console.log(record.user_id);}} /></a>
         </Space>
       ),
     },
   ];
-  console.log(columns);
-    const [users, setUsers] = useState([]);
-    console.log(users);
-    useEffect(() => {
-      axios
-        .get("http://localhost:8080/users")
-        .then((response) => {
-          setUsers(response?.data);
-          console.log(response?.data);
-        })
-        .catch((err) => console.log(err));
-    }, []);
-
-  const data = [
-    {
-      key: '1',
-      username: 'John Brown',
-      email: 'r@gmail.com',
-      role: 'Admin',
-      status:['Active'],
-    },
-    {
-      key: '2',
-      username: 'John Brown 2',
-      email: 'r@gmail.com',
-      role: 'Admin',
-      status:['Active'],
-    },
-    {
-      key: '3',
-      username: 'John Brown 3',
-      email: 'r@gmail.com',
-      role: 'Client ',
-      status:['Inactive'],
-    },
-    
-  ];
-  
 
   const [addUserModal, setaddUserModal] = useState(false);
   const [editUserModal, setEditUserModal] = useState(false);
+  const [deleteUserModal, setDeleteUserModal] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
 
+  const [allUsers, setAllUsers] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/users")
+      .then((response) => {
+        setAllUsers(response?.data);
+        console.log(response?.data);
+      })
+      .catch((err) => console.log(err));
+  },[]);  
+
+  // Upon creation of new users
+  const [userCreate, setUserCreate] = useState({
+    username: '',
+    email: '',
+    password: '',
+    dataCreated: new Date(),
+    status: "Active",
+    role: {
+      role_id: '',
+    }
+  });
+
+  const handleOnChangeUser = (e) => {
+    const { name, value } = e.target;
+    if(name != null && name === 'role_id')
+    {
+      const intValue = parseInt(value);
+      console.log("intvaue " + intValue);
+      setUserCreate((prevState) => ({ ...prevState, [name]: intValue }));
+    }
+    else
+      setUserCreate((prevState) => ({ ...prevState, [name]: value }));
+  };
+
+  function handleSubmit(event) {
+    event.preventDefault(); //prevents refresh after sending a form
+    console.log("Submit create users: " + JSON.stringify(userCreate));
+    axios
+      .post("http://localhost:8080/user/create", userCreate)
+      .then((response) => {
+        console.log(response.data);
+        // authentication successful, do something here
+        if (response.status === 200) {
+          console.log("Success create user");
+          hideaddUserModal();
+        } else {
+          console.log("Fail create user");
+        }
+      })
+      .catch((error) => {
+        // authentication failed, do something here
+        console.log(error);
+      });
+  }
+ // eend
 
   const handleRowClick = (record) => {
-    setSelectedUserId({key: record.key, username: record.username, password: record.password, email: record.email, role : record.role, status: record.status});
+    setSelectedUserId({key: record.user_id, username: record.username, password: record.password, email: record.email, role : record.role.role_name, status: record.status});
   };
 
   useEffect(() => {
@@ -132,6 +144,13 @@ function settings() {
     setEditUserModal(false);
   };
 
+  const showDeleteUserModal = () => {
+    setDeleteUserModal(true);
+  };
+  const hideDeleteUserModal = () => {
+    setDeleteUserModal(false);
+  };
+
 
   return (
     <>
@@ -141,7 +160,7 @@ function settings() {
       </Head>
       <h3 className={styles.title} style={{textAlign: "left", float: "left"}}> <UserOutlined />List of Users</h3>
       <Button className="btn_add" style={{boxShadow: "none", float: "right"}} onClick={showaddUserModal} icon={<PlusOutlined/>}>Add Users</Button>
-      <Table columns={columns} dataSource={users? users:null} onRow={(record) => ({ onClick: () => {handleRowClick(record);}})} />
+      <Table columns={columns} dataSource={allUsers? allUsers.data : ''} onRow={(record) => ({ onClick: () => {handleRowClick(record);}})} />
   
     {/* Modal for Add */}
     <Modal show={addUserModal} onHide={hideaddUserModal}>
@@ -158,15 +177,24 @@ function settings() {
           </svg>
         </Modal.Header>
         <Modal.Body className="text-center" style={{ margin:'10px'}}>
-          <form>
-            <input type="text" placeholder="Username" className="bg-gray-100 outline-none text-sm flex-1 mb-2" required/>
-            <input type="email" placeholder="Email Address" className="bg-gray-100 outline-none text-sm flex-1 mb-2" required/>
-            <Form.Select className="bg-gray-100 outline-none text-sm flex-1 mb-2">
-              <option value="client">Client</option>
-              <option value="admin">Admin</option>
+          <form className="form1" onSubmit={handleSubmit}>
+            <label>Username</label>
+            <input type="text" name="username" onChange={handleOnChangeUser} className="bg-gray-100 outline-none text-sm flex-1 mb-2" required/>
+            <label>Password</label>
+            <input type="password" name="password" onChange={handleOnChangeUser} className="bg-gray-100 outline-none text-sm flex-1 mb-2" required/>
+            <label>Email Address</label>
+            <input type="email" name="email" onChange={handleOnChangeUser} className="bg-gray-100 outline-none text-sm flex-1 mb-2" required/>
+            <label>User Role</label>
+            <Form.Select name="role.role_id" onChange={handleOnChangeUser} className="bg-gray-100 outline-none text-sm flex-1 mb-2">
+              <option disabled value="" selected>Select a role</option>
+              <option value='1'>Client</option>
+              <option value='2'>Sales Team</option>
+              <option value='3'>Billing In-Charge</option>
+              <option value='4'>Collection In-Charge</option>
+              <option value='5'>Treasury</option>
+              <option value='6'>Super Admin</option>
             </Form.Select>  
-            <button type="submit" style={{boxShadow: "none"}} className="w-full bg-red-700 hover:bg-cyan hover:text-white"
-            >
+            <button type="submit" style={{boxShadow: "none"}} className="w-full bg-red-700 hover:bg-cyan hover:text-white" onClick={handleSubmit}>
               Add User
             </button>
           </form>
@@ -192,13 +220,13 @@ function settings() {
             <label>Username</label>
             <input type="text" defaultValue={selectedUserId ? selectedUserId.username : ''} className="bg-gray-100 outline-none text-sm flex-1 mb-2" required/>
             <label>Password</label>
-            <input type="password" className="bg-gray-100 outline-none text-sm flex-1 mb-2" required/>
+            <input type="password" defaultValue={selectedUserId ? selectedUserId.password : ''} className="bg-gray-100 outline-none text-sm flex-1 mb-2" required/>
             <label>Email</label>
             <input type="email" defaultValue={selectedUserId ? selectedUserId.email : ''} className="bg-gray-100 outline-none text-sm flex-1 mb-2" required/>
             <label>Role</label>
             <Form.Select defaultValue={selectedUserId ? selectedUserId.role : ''}  className="bg-gray-100 outline-none text-sm flex-1 mb-2  selectRole">
               <option value="Client" selected={selectedUserId && selectedUserId.role === 'Client'}>Client</option>
-              <option value="Admin" selected={selectedUserId && selectedUserId.role === 'Admin'}>Admin</option>
+              <option value="Super Admin" selected={selectedUserId && selectedUserId.role === 'Super Admin'}>Super Admin</option>
             </Form.Select>
             <label>Status</label>
             <Form.Select defaultValue={selectedUserId ? selectedUserId.status : ''}  className="bg-gray-100 outline-none text-sm  flex-1 mb-2 selectStatus">
@@ -211,6 +239,29 @@ function settings() {
           </form>
         </Modal.Body>
       </div>
+    </Modal>
+    {/* Modal for Delete */}
+    <Modal show={deleteUserModal} onHide={hideDeleteUserModal} >
+        <Modal.Header style={{padding: '10px', backgroundColor:'#963634', color:'white'}}>
+          <Modal.Title style={{fontWeight: 'bold'}}><UserDeleteOutlined /> Delete User</Modal.Title>
+          <svg
+                style={{ position: 'absolute', top: '15px', right: '15px', cursor: 'pointer', border:'1px solid gray' }}
+                xmlns="http://www.w3.org/2000/svg"
+                width="30" height="30" fill="currentColor" className="bi bi-x" viewBox="0 0 16 16"
+                onClick={hideDeleteUserModal}
+            >
+            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
+          </svg>
+        </Modal.Header>
+        <Modal.Body style={{ margin:'10px'}}>
+          <h4 style={{fontWeight: 'bold'}}>Are you sure you want to delete this user?</h4>
+          <p style={{fontStyle:'italic', fontSize: '14px'}}> *Deleting this user will remove the user information from your database.*</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" style={{width: '40%', height: '40px', boxShadow: "none", backgroundColor: '#963634', color: 'white' }}>Delete</Button>
+          <Button variant="secondary" style={{width: '30%', height: '40px', boxShadow: "none", backgroundColor: 'white', color: 'black'}} >Cancel</Button>
+        </Modal.Footer>
+
     </Modal>
    </>
   );
