@@ -101,7 +101,7 @@ function reports() {
       ticket.ticket_description,
       ticket.date_created,
       ticket.ticket_status,
-      ticket.ticket_owner,
+      username,
     ]);
 
     const csv = [headers, ...data].map((row) => row.join(",")).join("\n");

@@ -492,6 +492,7 @@ function clientDashboard() {
             show={showViewTicketModal}
             onCancel={onCancelShow}
             row={selectedRow}
+            username={username}
           />
         )}
       </div>
@@ -501,7 +502,7 @@ function clientDashboard() {
 
 export default clientDashboard;
 
-export function ShowTicketModal({ show, onCancel, row }) {
+export function ShowTicketModal({ show, onCancel, row, username }) {
   const style = {
     position: "absolute",
     top: "50%",
@@ -636,7 +637,7 @@ export function ShowTicketModal({ show, onCancel, row }) {
                 className="CancelAllStyling"
                 style={{ borderBottom: "1px solid black", paddingLeft: "10px" }}
               >
-                {row.ticket_owner}
+                {username}
               </td>
             </tr>
             <tr>
