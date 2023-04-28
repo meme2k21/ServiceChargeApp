@@ -18,6 +18,7 @@ function clientDashboard() {
   const [email, setEmail] = useState(null);
 
   const [selectedRows, setSelectedRows] = useState([]);
+  const [currentTickets, setCurrentTickets] = useState([]);
   const [tickets, setTickets] = useState([]);
   const [agingTickets, setAgingTickets] = useState([]);
   const [pendingTickets, setPendingTickets] = useState([]);
@@ -35,6 +36,7 @@ function clientDashboard() {
   useEffect(() => {
     getData();
   }, [selectedRows, id]);
+
   async function getData() {
     const user_id = await id;
     axios
@@ -42,6 +44,7 @@ function clientDashboard() {
       .then(async (response) => {
         const data = response?.data.data;
         setTickets(data);
+        setCurrentTickets(data);
       })
       .catch((err) => console.log(err));
   }
@@ -146,6 +149,31 @@ function clientDashboard() {
     setShowViewTicketModal(false);
   };
 
+  //When box is clicked, list of tickets will adjust
+  function handleClickBox(name) {
+    if(name === 'firstBox')
+    {
+      setCurrentTickets(tickets);
+      console.log(name);
+    }
+    else if(name === 'secondBox')
+    {
+      setCurrentTickets(agingTickets);
+      console.log(name);
+    }
+    else if(name === 'thirdBox')
+    {
+      setCurrentTickets(pendingTickets);
+      console.log(name);
+    }
+    else if(name === 'fourthBox')
+    {
+      setCurrentTickets(invoiceTickets);
+      console.log(name);
+    }
+  }
+
+
   return (
     <div style={{ background: "white" }}>
       <Head>
@@ -172,6 +200,7 @@ function clientDashboard() {
               alignItems: "center",
               position: "relative",
             }}
+            onClick={()=>handleClickBox('firstBox')}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -243,6 +272,7 @@ function clientDashboard() {
               alignItems: "center",
               position: "relative",
             }}
+            onClick={()=>handleClickBox('secondBox')}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -270,35 +300,6 @@ function clientDashboard() {
             <div style={{ fontSize: "16px" }}>
               {agingTickets.length > 1 ? "aging tickets" : "aging ticket"}
             </div>
-            <a
-              onClick={() => {
-                router.push("/ticket/create");
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="30"
-                height="30"
-                fill="currentColor"
-                className="bi bi-clipboard-plus"
-                viewBox="0 0 16 16"
-                style={{ position: "absolute", bottom: "10px", right: "10px" }}
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z"
-                  fill="white"
-                ></path>{" "}
-                <path
-                  d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"
-                  fill="white"
-                ></path>{" "}
-                <path
-                  d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"
-                  fill="white"
-                ></path>
-              </svg>
-            </a>
           </div>
 
           {/* third box in dashboard */}
@@ -311,6 +312,7 @@ function clientDashboard() {
               alignItems: "center",
               position: "relative",
             }}
+            onClick={() => handleClickBox('thirdBox')}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -338,35 +340,6 @@ function clientDashboard() {
             <div style={{ fontSize: "16px" }}>
               {sortedData.length > 1 ? "pending tickets" : "pending ticket"}
             </div>
-            <a
-              onClick={() => {
-                router.push("/ticket/create");
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="30"
-                height="30"
-                fill="currentColor"
-                className="bi bi-clipboard-plus"
-                viewBox="0 0 16 16"
-                style={{ position: "absolute", bottom: "10px", right: "10px" }}
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z"
-                  fill="white"
-                ></path>{" "}
-                <path
-                  d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"
-                  fill="white"
-                ></path>{" "}
-                <path
-                  d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"
-                  fill="white"
-                ></path>
-              </svg>
-            </a>
           </div>
 
           {/* fourth box in dashboard */}
@@ -379,6 +352,7 @@ function clientDashboard() {
               alignItems: "center",
               position: "relative",
             }}
+            onClick={() => handleClickBox('fourthBox')}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -408,35 +382,6 @@ function clientDashboard() {
                 ? "Invoice Approved tickets"
                 : "Invoice Approved ticket"}
             </div>
-            <a
-              onClick={() => {
-                router.push("/ticket/create");
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="30"
-                height="30"
-                fill="currentColor"
-                className="bi bi-clipboard-plus"
-                viewBox="0 0 16 16"
-                style={{ position: "absolute", bottom: "10px", right: "10px" }}
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z"
-                  fill="white"
-                ></path>{" "}
-                <path
-                  d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"
-                  fill="white"
-                ></path>{" "}
-                <path
-                  d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"
-                  fill="white"
-                ></path>
-              </svg>
-            </a>
           </div>
         </div>
         <br />
@@ -466,7 +411,7 @@ function clientDashboard() {
               </tr>
             </thead>
             <tbody>
-              {tickets.map((ticket) => {
+              {currentTickets.map((ticket) => {
                 return (
                   <tr
                     key={ticket.ticket_id}

@@ -22,14 +22,18 @@ export default function CreateTicket({ show, onYes, onCancel }) {
     backgroundColor: "white",
   };
 
+
   const router = useRouter();
   const [ticket, setTicket] = useState({
     ticket_title: "",
     ticket_description: "",
     date_created: new Date(),
     ticket_status: "case-filed",
-    ticket_owner: 1,
+    ticket_owner_id: {
+      user_id: 1,
+    },
   });
+
 
   const handleOnChangeTicket = (e) => {
     const { name, value } = e.target;
@@ -42,13 +46,13 @@ export default function CreateTicket({ show, onYes, onCancel }) {
     axios
       .post("http://localhost:8080/ticket/create", ticket)
       .then((response) => {
-        console.log(response.data);
+        console.log(response.data.data);
         // authentication successful, do something here
         if (response.status === 200) {
-          console.log("Success create ticket");
-          onCancel();
+          console.log(response.data.message);
+          window.location.replace('/dashboard');
         } else {
-          console.log("Fail create ticket");
+          console.log(response.data.message);
         }
       })
       .catch((error) => {
@@ -56,7 +60,6 @@ export default function CreateTicket({ show, onYes, onCancel }) {
         console.log(error);
       });
   }
-
   return (
     <Modal show={show} onHide={onCancel}>
       <div>

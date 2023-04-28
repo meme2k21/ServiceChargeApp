@@ -65,18 +65,11 @@ function AdminNavbar(props) {
         </Link>
 
         {loggedin ? (
-          <>
-          <Link
-            className={router.asPath === "/settings" ? "active-link" : ""} href="/settings" style={{textDecoration:'none'}} onClick={handleLoginClick}
-          >
-            Settings
-          </Link>
           <Link
           className={router.asPath === "/" ? "active-link" : ""} href="/" style={{textDecoration:'none'}} onClick={handleLogOutClick}
         >
           Log Out
         </Link>
-        </>
         ) : (
           <Link
             className={router.asPath === "/" ? "active-link" : ""} href="/" style={{textDecoration:'none'}} onClick={handleLoginClick}

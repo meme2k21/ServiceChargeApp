@@ -19,6 +19,7 @@ function dashboard() {
 
   const [selectedRows, setSelectedRows] = useState([]);
   const [users, setUsers] = useState([]);
+  const [currentTickets, setCurrentTickets] = useState([]);
   const [tickets, setTickets] = useState([]);
   const [agingTickets, setAgingTickets] = useState([]);
   const [pendingTickets, setPendingTickets] = useState([]);
@@ -33,19 +34,22 @@ function dashboard() {
   }, []);
 
   // get lists of tickets and users
-  useEffect(() => {
+  function getData(){
     axios
       .get("http://localhost:8080/tickets")
       .then((response) => {
         console.log(response);
         setTickets(response?.data.data);
+        setCurrentTickets(response?.data.data);
       })
       .catch((err) => console.log(err));
 
     axios.get("http://localhost:8080/users").then((response) => {
-      console.log(response?.data.data);
       setUsers(response?.data.data);
     });
+  }
+  useEffect(() => {
+    getData();
   }, [selectedRows]);
 
   useEffect(() => {
@@ -143,8 +147,33 @@ function dashboard() {
     console.log(selectedRow);
   };
   const onCancelShow = () => {
+    getData();
     setShowViewTicketModal(false);
   };
+
+  //When box is clicked, list of tickets will adjust
+  function handleClickBox(name) {
+    if(name === 'firstBox')
+    {
+      setCurrentTickets(tickets);
+      console.log(name);
+    }
+    else if(name === 'secondBox')
+    {
+      setCurrentTickets(agingTickets);
+      console.log(name);
+    }
+    else if(name === 'thirdBox')
+    {
+      setCurrentTickets(pendingTickets);
+      console.log(name);
+    }
+    else if(name === 'fourthBox')
+    {
+      setCurrentTickets(invoiceTickets);
+      console.log(name);
+    }
+  }
 
   return (
     <div style={{ background: "white" }}>
@@ -172,6 +201,7 @@ function dashboard() {
               alignItems: "center",
               position: "relative",
             }}
+            onClick={()=>handleClickBox('firstBox')}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -243,6 +273,7 @@ function dashboard() {
               alignItems: "center",
               position: "relative",
             }}
+            onClick={()=>handleClickBox('secondBox')}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -270,35 +301,6 @@ function dashboard() {
             <div style={{ fontSize: "16px" }}>
               {agingTickets.length > 1 ? "aging tickets" : "aging ticket"}
             </div>
-            <a
-              onClick={() => {
-                router.push("/ticket/create");
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="30"
-                height="30"
-                fill="currentColor"
-                className="bi bi-clipboard-plus"
-                viewBox="0 0 16 16"
-                style={{ position: "absolute", bottom: "10px", right: "10px" }}
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z"
-                  fill="white"
-                ></path>{" "}
-                <path
-                  d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"
-                  fill="white"
-                ></path>{" "}
-                <path
-                  d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"
-                  fill="white"
-                ></path>
-              </svg>
-            </a>
           </div>
 
           {/* third box in dashboard */}
@@ -311,6 +313,7 @@ function dashboard() {
               alignItems: "center",
               position: "relative",
             }}
+            onClick={() => handleClickBox('thirdBox')}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -338,35 +341,6 @@ function dashboard() {
             <div style={{ fontSize: "16px" }}>
               {sortedData.length > 1 ? "pending tickets" : "pending ticket"}
             </div>
-            <a
-              onClick={() => {
-                router.push("/ticket/create");
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="30"
-                height="30"
-                fill="currentColor"
-                className="bi bi-clipboard-plus"
-                viewBox="0 0 16 16"
-                style={{ position: "absolute", bottom: "10px", right: "10px" }}
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z"
-                  fill="white"
-                ></path>{" "}
-                <path
-                  d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"
-                  fill="white"
-                ></path>{" "}
-                <path
-                  d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"
-                  fill="white"
-                ></path>
-              </svg>
-            </a>
           </div>
 
           {/* fourth box in dashboard */}
@@ -379,6 +353,7 @@ function dashboard() {
               alignItems: "center",
               position: "relative",
             }}
+            onClick={() => handleClickBox('fourthBox')}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -408,38 +383,11 @@ function dashboard() {
                 ? "Invoice Approved tickets"
                 : "Invoice Approved ticket"}
             </div>
-            <a
-              onClick={() => {
-                router.push("/ticket/create");
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="30"
-                height="30"
-                fill="currentColor"
-                className="bi bi-clipboard-plus"
-                viewBox="0 0 16 16"
-                style={{ position: "absolute", bottom: "10px", right: "10px" }}
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z"
-                  fill="white"
-                ></path>{" "}
-                <path
-                  d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"
-                  fill="white"
-                ></path>{" "}
-                <path
-                  d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"
-                  fill="white"
-                ></path>
-              </svg>
-            </a>
           </div>
         </div>
         <br />
+
+        {/* table */}
         <div style={{ overflowY: "scroll" }}>
           <table
             style={{
@@ -467,17 +415,15 @@ function dashboard() {
               </tr>
             </thead>
             <tbody>
-              {tickets.map((ticket) => {
+              {currentTickets.map((ticket) => {
                 const matchingUser = users.find((user) => {
-                  console.log(user.user_id === ticket.ticket_owner_id);
 
                   return (
                     user.user_id === ticket.ticket_owner_id ||
                     user.user_id === ticket.ticket_owner_id.user_id
                   );
                 });
-
-                console.log(matchingUser);
+                
                 return (
                   <tr
                     key={ticket.ticket_id}
@@ -708,7 +654,14 @@ export function ShowTicketModal({ show, onCancel, row }) {
             >
               Create conforme slip
             </Button>
-          ) : null}
+          ) 
+          : row.ticket_status === "case-filed"? (
+            <Button style={{ backgroundColor: "#963634", border: "none" }}
+            >
+              View conforme slip
+            </Button>
+          )
+          : null}
           {showConformeModal && (
             <ConformeSlipModal
               show={showConformeModal}

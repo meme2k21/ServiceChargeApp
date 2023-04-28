@@ -124,6 +124,7 @@ function reports() {
         <title>Reports</title>
         <meta name="keywords" content="reports" />
       </Head>
+      <></>
       <div
         style={{
           display: "flex",
@@ -131,24 +132,6 @@ function reports() {
           justifyContent: "space-between",
         }}
       >
-        <select
-          value={ticketYearCreated}
-          onChange={handleSelectChange}
-          style={{
-            display: "flex",
-            opacity: ticketYearCreated === "Year Created" ? 0.5 : 1,
-            border: "1px solid black",
-            marginRight: "20px",
-            height: "40px",
-            width: "227px",
-            fontStyle: "italic",
-          }}
-        >
-          <option disabled>Year Created</option>
-          <option>All</option>
-          <option>2023</option>
-          <option>2022</option>
-        </select>
         {/* TO PRINT REPORTS */}
         <a
           href=""

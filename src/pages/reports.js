@@ -63,32 +63,6 @@ function reports() {
     []
   );
 
-  // const exportPDF = () => {
-  //   const unit = "pt";
-  //   const size = "A4"; // Use A1, A2, A3 or A4
-  //   const orientation = "landscape"; // portrait or landscape
-
-  //   const marginLeft = 40;
-  //   const doc = new jsPDF(orientation, unit, size);
-
-  //   doc.setFontSize(15);
-
-  //   const title = "Tickets Report";
-  //   const headers = [["TITLE", "DESCRIPTION", "DATE FILED", "STATUS", "OWNER"]];
-
-  //   const data = tickets.map(ticket=> [ticket.ticket_title, ticket.ticket_description, ticket.date_created, ticket.ticket_status, ticket.ticket_owner]);
-
-  //   let content = {
-  //     startY: 50,
-  //     head: headers,
-  //     body: data
-  //   };
-
-  //   doc.text(title, marginLeft, 40);
-  //   doc.autoTable(content);
-  //   doc.save("tickets_report.pdf");
-  // }
-
   const exportCSV = () => {
     const headers = ["TITLE", "DESCRIPTION", "DATE FILED", "STATUS", "OWNER"];
 
@@ -127,24 +101,6 @@ function reports() {
           justifyContent: "space-between",
         }}
       >
-        <select
-          value={ticketYearCreated}
-          onChange={handleSelectChange}
-          style={{
-            display: "flex",
-            opacity: ticketYearCreated === "Year Created" ? 0.5 : 1,
-            border: "1px solid black",
-            marginRight: "20px",
-            height: "40px",
-            width: "227px",
-            fontStyle: "italic",
-          }}
-        >
-          <option disabled>Year Created</option>
-          <option>All</option>
-          <option>2023</option>
-          <option>2022</option>
-        </select>
         {/* TO PRINT REPORTS */}
         <a
           href=""
