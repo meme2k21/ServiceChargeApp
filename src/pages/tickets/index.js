@@ -672,7 +672,7 @@ export function ModalEdit({ title, label, onYes, onCancel, show, row }) {
             </tr>
             <tr>
               <td className="CancelAllStyling" style={{ fontSize: "14px" }}>
-                Issued by:{row.ticket_owner_id.username}
+                Issued by:
               </td>
               <td
                 colSpan={3}
@@ -684,7 +684,7 @@ export function ModalEdit({ title, label, onYes, onCancel, show, row }) {
                   wordWrap: "break-word",
                 }}
               >
-                {row.ticket_owner}
+                {row.ticket_owner_id.username}
               </td>
             </tr>
             <br />
@@ -707,6 +707,7 @@ export function ModalEdit({ title, label, onYes, onCancel, show, row }) {
                   console.error("Error updating ticket:", error);
                 });
               onYes();
+              window.location.reload();
             }}
           >
             Update
