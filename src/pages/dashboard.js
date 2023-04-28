@@ -654,7 +654,14 @@ export function ShowTicketModal({ show, onCancel, row }) {
             >
               Create conforme slip
             </Button>
-          ) : null}
+          ) 
+          : row.ticket_status === "case-filed"? (
+            <Button style={{ backgroundColor: "#963634", border: "none" }}
+            >
+              View conforme slip
+            </Button>
+          )
+          : null}
           {showConformeModal && (
             <ConformeSlipModal
               show={showConformeModal}
