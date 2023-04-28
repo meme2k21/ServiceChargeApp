@@ -148,14 +148,7 @@ const Login = () => {
                     </Link>
                   </div>
                   <div className="flex justify-between w-full mb-5">
-                    <label className="flex items-center text-xs">
-                      <input
-                        type="checkbox"
-                        name="remember"
-                        className="mr-1 flex-1"
-                      />
-                      Remember me
-                    </label>
+                    <label></label>
                     <Link href="/forgotpassword" className="text-xs">
                       Forgot Password?
                     </Link>
@@ -202,14 +195,14 @@ const Login = () => {
               width={500}
               height={500}
             />
-            <div className="text-sm">
+            {/* <div className="text-sm">
               <p>
                 Don't have an account?{" "}
                 <Link href="/register" className="text-red-700">
                   Register here
                 </Link>
               </p>
-            </div>
+            </div> */}
           </div>
         </div>
       </main>
