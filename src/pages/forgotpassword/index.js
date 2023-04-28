@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { FaRegEnvelope, FaUnlockAlt } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaRegEnvelope, FaUnlockAlt } from "react-icons/fa";
 
 function ForgotPassword() {
   const router = useRouter();
@@ -17,6 +17,15 @@ function ForgotPassword() {
   // Password
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  function handleShowPassword() {
+    setShowPassword(!showPassword);
+  }
+  function handleShowConfirmPassword() {
+    setShowConfirmPassword(!showConfirmPassword);
+  }
 
   const handleNewPasswordChange = (event) => {
     setNewPassword(event.target.value);
@@ -113,6 +122,10 @@ function ForgotPassword() {
           newPassword: newPassword,
         }
       );
+
+      if (response.status === 200 && response.data !== null) {
+        axios.delete(`http://localhost:8080/tokens/delete/${email}`);
+      }
       router.push("/");
 
       return response.data;
@@ -236,31 +249,57 @@ function ForgotPassword() {
                       <FaUnlockAlt className="text-gray-400 m-2" />
                       <input
                         required
-                        type="password"
                         name="newpassword"
+                        type={showPassword ? "text" : "password"}
+                        value={newPassword}
                         onChange={handleNewPasswordChange}
-                        placeholder="New Password"
-                        className="bg-gray-100 outline-none text-sm flex-1 border-hidden"
+                        placeholder="Password"
+                        className="bg-gray-100 outline-none text-sm flex-1 border-hidden autofill:bg-black"
                       />
+                      <Link
+                        href="#"
+                        onClick={handleShowPassword}
+                        style={{
+                          background: "transparent",
+                          border: "none",
+                          outline: "none",
+                        }}
+                      >
+                        {showPassword ? (
+                          <FaEyeSlash className="text-gray-400 m-2" />
+                        ) : (
+                          <FaEye className="text-gray-400 m-2" />
+                        )}
+                      </Link>
                     </div>
                     <div className="bg-gray-100 w-full p-0 flex items-center mb-2 border-b-2 border-red-700">
                       <FaUnlockAlt className="text-gray-400 m-2" />
 
                       <input
                         required
-                        type="password"
+                        type={showConfirmPassword ? "text" : "password"}
                         name="confirmnewpassword"
+                        value={confirmNewPassword}
                         onChange={handleConfirmNewPasswordChange}
                         placeholder="Confirm New Password"
                         className="bg-gray-100 outline-none text-sm flex-1 border-hidden"
                       />
+                      <Link
+                        href="#"
+                        onClick={handleShowConfirmPassword}
+                        style={{
+                          background: "transparent",
+                          border: "none",
+                          outline: "none",
+                        }}
+                      >
+                        {showConfirmPassword ? (
+                          <FaEyeSlash className="text-gray-400 m-2" />
+                        ) : (
+                          <FaEye className="text-gray-400 m-2" />
+                        )}
+                      </Link>
                     </div>
-                    <button
-                      type="submit"
-                      className="bg-red-700 text-white p-2 rounded-sm w-full font-semibold hover:bg-white hover:text-red-700 mb-2 text-lg"
-                    >
-                      Reset Password
-                    </button>
                   </div>
                 </div>
               </form>
