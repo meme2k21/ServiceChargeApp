@@ -151,7 +151,7 @@ function Tickets() {
       >
         <div style={{ display: "flex", alignItems: "center" }}>
           <select
-            value={ticketHealth}
+            // value={ticketHealth}
             style={{
               opacity: ticketHealth === "Ticket Health" ? 0.5 : 1,
               border: "1px solid black",
@@ -166,7 +166,7 @@ function Tickets() {
             <option>All Tickets</option>
           </select>
           <select
-            value={ticketStatus}
+            // value={ticketStatus}
             style={{
               opacity: ticketStatus === "Ticket Status" ? 0.5 : 1,
               border: "1px solid black",
@@ -181,7 +181,7 @@ function Tickets() {
             <option>3</option>
           </select>
           <select
-            value={ticketYearCreated}
+            // value={ticketYearCreated}
             style={{
               opacity: ticketYearCreated === "Year Created" ? 0.5 : 1,
               border: "1px solid black",
