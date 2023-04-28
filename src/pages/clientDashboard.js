@@ -477,7 +477,9 @@ function clientDashboard() {
                     <td className="table-cell flex-row">{ticket.ticket_id}</td>
                     <td className="table-cell">{ticket.ticket_title}</td>
                     <td className="table-cell">{ticket.ticket_description}</td>
-                    <td className="table-cell">{ticket.date_created}</td>
+                    <td className="table-cell">
+                      {new Date(ticket.date_created).toLocaleString()}
+                    </td>
                     <td className="table-cell">{ticket.ticket_status}</td>
                   </tr>
                 );

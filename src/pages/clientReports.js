@@ -69,7 +69,7 @@ function reports() {
       {
         id: 4,
         name: "Date Created",
-        selector: (row) => row.date_created,
+        selector: (row) => new Date(row.date_created).toLocaleString(),
         sortable: true,
         reorder: true,
         right: true,
