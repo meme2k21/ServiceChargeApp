@@ -19,6 +19,8 @@ function Layout({ children }) {
     setEmail(localStorage.getItem("email"));
   }, []);
 
+  console.log(role);
+
   const hideNavbar =
     router.pathname === "/login" ||
     router.pathname === "/register" ||

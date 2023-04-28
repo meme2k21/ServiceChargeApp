@@ -13,7 +13,7 @@ function reports() {
     axios
       .get("http://localhost:8080/tickets")
       .then((response) => {
-        setTickets(response?.data);
+        setTickets(response?.data.data);
       })
       .catch((err) => console.log(err));
   },[]);
@@ -62,32 +62,6 @@ function reports() {
     ],
     []
   );
-
-  // const exportPDF = () => {
-  //   const unit = "pt";
-  //   const size = "A4"; // Use A1, A2, A3 or A4
-  //   const orientation = "landscape"; // portrait or landscape
-
-  //   const marginLeft = 40;
-  //   const doc = new jsPDF(orientation, unit, size);
-
-  //   doc.setFontSize(15);
-
-  //   const title = "Tickets Report";
-  //   const headers = [["TITLE", "DESCRIPTION", "DATE FILED", "STATUS", "OWNER"]];
-
-  //   const data = tickets.map(ticket=> [ticket.ticket_title, ticket.ticket_description, ticket.date_created, ticket.ticket_status, ticket.ticket_owner]);
-
-  //   let content = {
-  //     startY: 50,
-  //     head: headers,
-  //     body: data
-  //   };
-
-  //   doc.text(title, marginLeft, 40);
-  //   doc.autoTable(content);
-  //   doc.save("tickets_report.pdf");
-  // }
 
   const exportCSV = () => {
     const headers = ['TITLE', 'DESCRIPTION', 'DATE FILED', 'STATUS', 'OWNER'];
