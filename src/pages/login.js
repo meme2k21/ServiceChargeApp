@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { FaLock, FaUserAlt } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaLock, FaUserAlt } from "react-icons/fa";
 import axios from "axios";
 import Head from "next/head";
 import { FaRegEnvelope, FaUnlockAlt } from "react-icons/fa";
@@ -13,11 +13,16 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
+
+  function handleShowPassword() {
+    setShowPassword(!showPassword);
+  }
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
@@ -119,13 +124,28 @@ const Login = () => {
                     <FaUnlockAlt className="text-gray-400 m-2" />
                     <input
                       required
-                      type="password"
                       name="password"
+                      type={showPassword ? "text" : "password"}
                       value={password}
                       onChange={handlePasswordChange}
                       placeholder="Password"
                       className="bg-gray-100 outline-none text-sm flex-1 border-hidden autofill:bg-black"
                     />
+                    <Link
+                      href="#"
+                      onClick={handleShowPassword}
+                      style={{
+                        background: "transparent",
+                        border: "none",
+                        outline: "none",
+                      }}
+                    >
+                      {showPassword ? (
+                        <FaEyeSlash className="text-gray-400 m-2" />
+                      ) : (
+                        <FaEye className="text-gray-400 m-2" />
+                      )}
+                    </Link>
                   </div>
                   <div className="flex justify-between w-full mb-5">
                     <label className="flex items-center text-xs">

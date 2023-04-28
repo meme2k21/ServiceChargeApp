@@ -21,20 +21,27 @@ import { Form, Modal, Row } from "react-bootstrap";
 function settings() {
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
-  useEffect(() => {
-    axios
-      .get("http://localhost:8080/users")
-      .then((response) => {
-        setUsers(response?.data.data);
-      })
-      .catch((err) => console.log(err));
 
-    axios
-      .get("http://localhost:8080/roles")
-      .then((response) => {
-        setRoles(response?.data.data);
-      })
-      .catch((err) => console.log(err));
+  async function fetchRoles() {
+    try {
+      const result = await axios.get("http://localhost:8080/roles");
+      setRoles(result?.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function fetchUsers() {
+    try {
+      const result = await axios.get("http://localhost:8080/users");
+      setUsers(result?.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    fetchRoles();
+    fetchUsers();
   }, []);
 
   const handleUpdateUser = (newUserDetails) => {
@@ -51,12 +58,12 @@ function settings() {
 
   const handleAddUser = (userDetails) => {
     console.log(JSON.stringify(userDetails));
-    // axios
-    //   .post(`http://localhost:8080/user/create`, userDetails)
-    //   .then((response) => {
-    //     console.log(response?.data.message);
-    //   })
-    //   .catch((err) => console.log("Error in creating user" + err));
+    axios
+      .post(`http://localhost:8080/user/create`, userDetails)
+      .then((response) => {
+        console.log(response?.data.message);
+      })
+      .catch((err) => console.log("Error in creating user" + err));
   };
 
   const handleDeleteUser = (user_id) => {
@@ -89,8 +96,9 @@ function settings() {
     const { name, value } = event.target;
     setUser((prevUser) => ({
       ...prevUser,
-      [name]: value,
+      [name]: name === "role" ? { role_id: value } : value,
     }));
+    console.log(JSON.stringify(user));
   };
 
   const columns = [
@@ -158,7 +166,7 @@ function settings() {
     const { name, value } = event.target;
     setSelectedUserId((prevSelectedUser) => ({
       ...prevSelectedUser,
-      [name]: value,
+      [name]: name === "role" ? { role_id: value } : value,
     }));
     console.log(JSON.stringify(selectedUserId));
   };
@@ -257,8 +265,7 @@ function settings() {
           </Modal.Header>
           <Modal.Body className="text-center" style={{ margin: "10px" }}>
             <form
-              onSubmit={(event) => {
-                event.preventDefault();
+              onSubmit={() => {
                 handleAddUser(user);
                 setaddUserModal(false);
               }}
@@ -283,7 +290,7 @@ function settings() {
               />
               <Form.Select
                 name="role"
-                value={user.role}
+                value={user.role.role_id}
                 onChange={handleUserInputChange}
                 required
                 className="bg-gray-100 outline-none text-sm flex-1 mb-2 selectRole"
@@ -291,13 +298,14 @@ function settings() {
                 {roles.map((role) => (
                   <option
                     key={role.role_id}
-                    value={role.role_name}
-                    selected={user && user.role.role_name === role.role_name}
+                    value={role.role_id}
+                    selected={user.role.role_id === role.role_id}
                   >
                     {role.role_name}
                   </option>
                 ))}
               </Form.Select>
+
               <button
                 type="submit"
                 style={{ boxShadow: "none" }}
@@ -309,7 +317,7 @@ function settings() {
           </Modal.Body>
         </div>
       </Modal>
-      {/* MOdal for Edit */}
+      {/* Modal for Edit */}
       <Modal
         show={editUserModal}
         onHide={hideEditUserModal}
@@ -349,8 +357,7 @@ function settings() {
           <Modal.Body style={{ margin: "10px" }}>
             <form
               className="form1"
-              onSubmit={(event) => {
-                event.preventDefault();
+              onSubmit={() => {
                 handleUpdateUser(selectedUserId);
                 setEditUserModal(false);
               }}
@@ -387,15 +394,15 @@ function settings() {
               <label>Role</label>
               <Form.Select
                 name="role"
-                value={selectedUserId?.role}
+                value={selectedUserId?.role.role_id}
                 onChange={handleInputChange}
                 className="bg-gray-100 outline-none text-sm flex-1 mb-2 selectRole"
               >
                 {roles.map((role) => (
                   <option
                     key={role.role_id}
-                    value={role.role_name}
-                    selected={selectedUserId?.role === role.role_name}
+                    value={role.role_id}
+                    selected={selectedUserId?.role.role_id === role.role_id}
                   >
                     {role.role_name}
                   </option>
