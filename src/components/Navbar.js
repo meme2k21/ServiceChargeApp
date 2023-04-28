@@ -23,7 +23,7 @@ function Navbar(props) {
   return (
     <nav className="CancelAllStylingNav">
           <div className="logo">
-            <a href='/' style={{ display: "flex", textDecoration: 'none', alignItems:'center' }}>
+            <a href='/' onClick={(e)=>e.preventDefault()} style={{ display: "flex", textDecoration: 'none', alignItems:'center' }}>
               <Image
                 alt="Alliance logo"
                 style={{
