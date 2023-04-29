@@ -151,28 +151,20 @@ function clientDashboard() {
 
   //When box is clicked, list of tickets will adjust
   function handleClickBox(name) {
-    if(name === 'firstBox')
-    {
+    if (name === "firstBox") {
       setCurrentTickets(tickets);
       console.log(name);
-    }
-    else if(name === 'secondBox')
-    {
+    } else if (name === "secondBox") {
       setCurrentTickets(agingTickets);
       console.log(name);
-    }
-    else if(name === 'thirdBox')
-    {
+    } else if (name === "thirdBox") {
       setCurrentTickets(pendingTickets);
       console.log(name);
-    }
-    else if(name === 'fourthBox')
-    {
+    } else if (name === "fourthBox") {
       setCurrentTickets(invoiceTickets);
       console.log(name);
     }
   }
-
 
   return (
     <div style={{ background: "white" }}>
@@ -200,7 +192,7 @@ function clientDashboard() {
               alignItems: "center",
               position: "relative",
             }}
-            onClick={()=>handleClickBox('firstBox')}
+            onClick={() => handleClickBox("firstBox")}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -272,7 +264,7 @@ function clientDashboard() {
               alignItems: "center",
               position: "relative",
             }}
-            onClick={()=>handleClickBox('secondBox')}
+            onClick={() => handleClickBox("secondBox")}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -312,7 +304,7 @@ function clientDashboard() {
               alignItems: "center",
               position: "relative",
             }}
-            onClick={() => handleClickBox('thirdBox')}
+            onClick={() => handleClickBox("thirdBox")}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -352,7 +344,7 @@ function clientDashboard() {
               alignItems: "center",
               position: "relative",
             }}
-            onClick={() => handleClickBox('fourthBox')}
+            onClick={() => handleClickBox("fourthBox")}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -682,6 +674,29 @@ export function ConformeSlipModal({ show, onCancel, row }) {
   };
   const date = new Date(row.date_created);
 
+  const [eSignature, setESignature] = useState(null);
+  const [proofOfPayment, setProofOfPayment] = useState(null);
+  const [scannedOrSlip, setScannedOrSlip] = useState(null);
+
+  const [attachments, setAttachments] = useState([]);
+
+  useEffect(() => {
+    getAttachmentsById();
+  }, []);
+  async function getAttachmentsById() {
+    const res = await axios.get(
+      `http://localhost:8080/attachments/tickets?ticketId=${row.ticket_id}`
+    );
+    console.log(JSON.stringify(res));
+    if (
+      res.status === 200 &&
+      res.data.status === "SUCCESS" &&
+      res.data.data !== null
+    ) {
+      setAttachments(res?.data?.data);
+      console.log(attachments);
+    }
+  }
   const months = [
     "January",
     "February",
@@ -706,7 +721,66 @@ export function ConformeSlipModal({ show, onCancel, row }) {
   });
   const displayDate = `${mm} ${dd} ${yyyy} (${formattedTime})`;
 
-  function handleSubmit(event) {}
+  const handleESignatureChange = (event) => {
+    const file = event.target.files[0];
+    setESignature(file);
+  };
+
+  const handleProofOfPaymentChange = (event) => {
+    const file = event.target.files[0];
+    uploadFile(file, row.ticket_id);
+    setProofOfPayment(file);
+  };
+
+  const handleScannedOrSlipChange = (event) => {
+    const file = event.target.files[0];
+    uploadFile(file, row.ticket_id);
+    setScannedOrSlip(file);
+  };
+
+  const uploadFile = async (file, ticketId, fileCat) => {
+    if (fileCat !== undefined && file && ticketId) {
+      const formData = new FormData();
+      formData.append("file_category", fileCat);
+      formData.append("file", file);
+
+      try {
+        const response = await axios.post(
+          `http://localhost:8080/tickets/${ticketId}/attachments`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        return response.data;
+      } catch (error) {
+        console.error("Failed to upload file:", error);
+      }
+    }
+  };
+
+  async function handleSubmit() {
+    try {
+      if (eSignature !== undefined) {
+        await uploadFile(eSignature, row.ticket_id, "eSignature");
+        console.log("Success upload e signature");
+      }
+
+      if (proofOfPayment !== undefined) {
+        await uploadFile(proofOfPayment, row.ticket_id, "proofOfPayment");
+        console.log("Success upload e proof of payment");
+      }
+
+      if (scannedOrSlip !== undefined) {
+        await uploadFile(scannedOrSlip, row.ticket_id, "scannedOrSlip");
+        console.log("Success upload scanned or slip");
+      }
+    } catch (error) {
+      console.log("Error");
+    }
+  }
 
   return (
     <Modal show={show} onHide={onCancel}>
@@ -883,11 +957,23 @@ export function ConformeSlipModal({ show, onCancel, row }) {
 
           <div style={{ textAlign: "left" }}>
             <label>eSignature:</label>
-            <input type="file" />
+            <input
+              type="file"
+              name="eSignature"
+              onChange={handleESignatureChange}
+            />
             <label>Proof of Payment:</label>
-            <input type="file" />
+            <input
+              type="file"
+              name="proofOfPayment"
+              onChange={handleProofOfPaymentChange}
+            />
             <label>Scanned OR Slip:</label>
-            <input type="file" />
+            <input
+              type="file"
+              name="scannedOrSlip"
+              onChange={handleScannedOrSlipChange}
+            />
           </div>
         </Modal.Body>
         <Modal.Footer>

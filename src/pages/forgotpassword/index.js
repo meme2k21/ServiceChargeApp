@@ -208,7 +208,6 @@ function ForgotPassword() {
                     <div className="flex flex-col items-center">
                       <div className="bg-gray-100 w-full p-0 flex items-center mb-2 border-b-2 border-red-700">
                         <FaRegEnvelope className="text-gray-400 m-2" />
-
                         <input
                           required
                           onChange={handleTokenChange}
@@ -300,6 +299,12 @@ function ForgotPassword() {
                         )}
                       </Link>
                     </div>
+                    <button
+                      type="submit"
+                      className="bg-red-700 text-white p-2 rounded-sm w-full font-semibold hover:bg-white hover:text-red-700 mb-2 text-lg text-decoration-none"
+                    >
+                      Reset Password
+                    </button>
                   </div>
                 </div>
               </form>
